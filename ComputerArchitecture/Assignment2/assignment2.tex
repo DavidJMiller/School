@@ -1,0 +1,251 @@
+\documentclass[12pt]{article}
+
+%-------------PACKAGES------------- 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{pgfplots}
+\usepackage{float}
+\usepackage{braket}
+\usepackage{titling}
+\usepackage{tikz}
+\usepackage{mwe}
+\usepackage{booktabs}
+\usepackage{pifont}
+\usepackage{array,graphicx}
+\usepackage{tabularx,colortbl}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{algorithm,algpseudocode}
+\usetikzlibrary{shapes,arrows,chains}
+\usetikzlibrary[calc]
+
+%-------------FORMATTING-------------
+\setlength{\droptitle}{-8.5em} 
+\setlength{\parindent}{0pt}
+\def\LW{\dimexpr.25\linewidth-.5em} 
+\tikzstyle{line} = [draw, -latex']
+ 
+%--------------COMMANDS--------------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+%\renewcommand{\qedsymbol}{\filledbox}
+\newcommand*\rot{\rotatebox{90}}
+\newcommand*\OK{\ding{51}}
+
+\DeclarePairedDelimiter \abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter \babs{\bigg\lvert}{\bigg\rvert}%
+\DeclarePairedDelimiter \norm{\lVert}{\rVert}%
+
+%------------ENVIRONMENTS------------- 
+\newenvironment{theorem}[2][]{\begin{trivlist}
+\item[{\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Reflection]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{definition}[2][]{\begin{trivlist}
+\item[{\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%-------------CODE-STYLE------------
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+	language=C++,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\tikzset{
+	path image/.style={
+		path picture={
+			\node at (path picture bounding box.center) {
+				\includegraphics[height=3cm]{example-image}};}},
+	path tikzimage/.style={
+		path picture={
+			\node at (path picture bounding box.center)
+			[circle, fill=blue!50, scale=2, text=yellow]{Bravo};}}
+}
+	
+\lstset{
+	morekeywords={end}
+}
+
+%------------------------------------ 
+%---------START-OF-DOCUMENT----------
+%------------------------------------
+\begin{document}
+ 
+\title{Assignment 2 \\ CDA 5155: Computer Architecture} 
+\author{David Miller}
+\date{\vspace{-.5cm} February 1, 2018}
+
+\maketitle
+
+\textit{The following is a description of the SNERDLEY 1000. Given this information, answer the following questions.}
+
+\begin{table}[H]
+	\footnotesize
+	\begin{tabular}[t]{|c|}	
+		\multicolumn{1}{c}{\bf Virtual Memory} \\ \hline
+		1 GB virtual memory \\ 
+		256 MB physical memory   \\
+		16 KB page size \\ \hline  
+	\end{tabular}
+	\hfill
+	\begin{tabular}[t]{|c|}
+		\multicolumn{1}{c}{\bf Instruction TLB} \\ \hline
+		Direct Mapped \\ 
+		64 virtual to physical translations \\ \hline 
+	\end{tabular}
+	\hfill
+	\begin{tabular}[t]{|c|}
+		\multicolumn{1}{c}{\bf Data TLB} \\ \hline
+		2-way associative \\ 
+		128 virtual to physical translations \\ \hline 
+	\end{tabular} 
+\end{table}
+
+\begin{table}[H]
+	\footnotesize
+	\begin{tabular}[t]{|c|}
+		\multicolumn{1}{c}{\bf Instruction Cache} \\ \hline
+		Cache line size is 32 bytes \\ 
+		2-way set associative \\
+		4 KB of instructions \\ 
+		LRU replacement \\ \hline  
+	\end{tabular}
+	\hfill
+	\begin{tabular}[t]{|c|}
+		\multicolumn{1}{c}{\bf Data Cache} \\ \hline
+		Cache line size is 64 bytes \\ 
+		Direct mapped \\
+		8 KB of data \\ 
+		write-through/no-write allocate \\ \hline  
+	\end{tabular}
+	\hfill
+	\begin{tabular}[t]{|c|}
+		\multicolumn{1}{c}{\bf Secondary Cache} \\ \hline
+		Unified cache \\ 
+		Cache line size is 512 bytes \\ 
+		4-way associative \\
+		1 MB in cache \\
+		LRU replacement \\ 
+		write-back/write allocate \\ \hline
+	\end{tabular} 
+\end{table}
+
+\textit{\textbf{Problem 1} How many bits are in a virtual address?} \\
+
+Virtual memory has 1GB = $2^{30}$ bytes. Therefore we need 30 bits to for the virtual address. \\
+
+\textit{\textbf{Problem 2} How many bits are in a physical address?} \\
+
+Physical memory has 256 MB = $2^{28}$ bytes. Therefore we need 28 bits for the physical address. \\
+
+\textit{\textbf{Problem 3} How many virtual pages are there?} \\ 
+
+Virtual memory can hold $2^{30}$ bytes and each virtual page takes 16 KB = $2^{14}$ bytes, therefore we have $2^{30}/2^{14} = 2^{16}$ virtual pages. \\ 
+
+\textit{\textbf{Problem 4} How many bits are in the page offset?} \\
+
+Each page is $2^{14}$ bytes, therefore we need $\log_2(2^{14}) = 14$ bits. \\
+
+\textit{\textbf{Problem 5} Show how the virtual address is partitioned (i.e. virtual page number and page offset).} 
+
+\begin{center}
+	\begin{tikzpicture}
+	\draw (0,0) -- (6,0) -- (6,1) -- (0,1) -- (0,0);
+	\draw (6,0) -- (11,0) -- (11,1) -- (6,1) -- (6,0);
+	
+	\node[text width=1cm] at (8.35,0.5) {\large Offset};
+	\node[text width=3cm] at (3,0.5) {\large Page Number};
+	\node[text width=1cm] at (0.35,-0.5) {$29$};
+	\node[text width=1cm] at (6.05,-0.5) {$14$};
+	\node[text width=1cm] at (6.55,-0.5) {$13$};
+	\node[text width=1cm] at (11.4,-0.5) {$0$};
+	\end{tikzpicture}
+\end{center}
+ 
+\textit{\textbf{Problem 6} How many physical pages are there?} \\
+
+Physical memory can hold $2^{28}$ bytes and each virtual page takes $2^{14}$ bytes, therefore we have $2^{28}/2^{14} = 2^{14}$ virtual pages. \\ 
+
+\textit{\textbf{Problem 7} Show how the physical address is partitioned (i.e. physical page number and page offset).}
+
+\begin{center}
+	\begin{tikzpicture}
+	\draw (0,0) -- (5.5,0) -- (5.5,1) -- (0,1) -- (0,0);
+	\draw (5.5,0) -- (11,0) -- (11,1) -- (5.5,1) -- (5.5,0);
+	
+	\node[text width=1cm] at (8.1,0.5) {\large Offset};
+	\node[text width=3cm] at (2.75,0.5) {\large Page Number};
+	\node[text width=1cm] at (0.35,-0.5) {$27$};
+	\node[text width=1cm] at (5.5,-0.5) {$14$};
+	\node[text width=1cm] at (6.05,-0.5) {$13$};
+	\node[text width=1cm] at (11.4,-0.5) {$0$};
+	\end{tikzpicture}
+\end{center}
+
+\textit{\textbf{Problem 8} How many entries are in the page table?} \\
+
+The number of entries is the page table is equal to the number of virtual pages, therefore there are $2^{16}$ entries in the page table. \\
+
+\textit{\textbf{Problem 9} How many bits are required for the tag to access the instruction TLB?} \\
+
+The bits used for the virtual page number are portioned into bits for the index and bits for the tag. The instruction TLB is direct mapped and has 64 virtual to physical translations (entries), therefore we need $\log_2(64) = \log_2(2^6) = 6$ bits for the index. Then we have 16 - 6 = 10 bits left for the tag. Intuitively this makes sense. If there are $2^{16}$ virtual pages that must be uniquely identifiable in $2^6$ sets, then there has to be $2^{10}$ tags so that no two elements in the same set can be confused for one another. Mathematically, this is equaivalent to the bijective map
+\begin{align*}
+	f: \underbrace{\{0,1\}^{20}}_{\text{VPN}} \rightarrow \underbrace{\{0,1\}^{14}}_{\text{Tag}} \times \underbrace{\{0,1\}^{6}}_{\text{Index}}.
+\end{align*}
+
+\textit{\textbf{Problem 10} How many sets are in the instruction cache?} \\
+
+The instruction cache is $4$ KB = $2^2$ KB = $2^{12}$ bytes with 32 byte = $2^5$ byte cache line. Since the cache is 2-way associative we have 2 $\cdot 2^5$ bytes = $2^6$ bytes per set. Therefore there are $2^{12}/2^6 = 2^6$ sets. \\
+
+\textit{\textbf{Problem 11} How many bits are required for the tag to access the instruction cache?} \\
+
+Physical address has 28 bits. Since the cache line size is $32$ bytes = $2^5$ bytes we need $\log_2(2^5) = 5$ bits for the offset. The instruction cache has $2^6$ sets and therefore needs $\log_2(2^6) = 6$ bits for the index. Therefore we have 28 - (5 + 6) = 17 bits for the tag. \\
+
+\newpage
+
+\textit{\textbf{Problem 12} How many sets are in the data cache?} \\
+
+The data cache is 8 KB = $2^3$ KB = $2^13$ bytes with 64 bytes = $2^6$ byte cache line. Since the cache is direct mapped we only have one line per set. Therefore there are $2^13/2^6 = 2^7$ sets. \\
+
+\textit{\textbf{Problem 13} How many bits are required for the tag to access the data cache?} \\
+
+Physical address has 28 bits. Since the cache line size is $64$ bytes = $2^6$ bytes we need $\log_2(2^6) = 6$ bits for the offset. The data cache has $2^7$ sets and therefore needs $\log_2(2^7) = 7$ bits for the index. Therefore we have 28 - (6 + 7) = 15 bits for the tag. \\
+
+\textit{\textbf{Problem 14} How many sets are in the secondary cache?} \\
+
+The secondary cache is 1 MB = $2^{10}$ KB = $2^{20}$ bytes with 512 bytes = $2^9$ bytes cache line. Since the cache is 4-way associative we have $4 \cdot 2^9$ bytes = $2^2 \cdot 2^9$ bytes = $2^{11}$ bytes per set. Therefore there are $2^{20}/2^{11} = 2^9$ sets. \\
+
+\textit{\textbf{Problem 15} How many bits are required for the tag to access the secondary cache?} \\
+
+Physical address has 28 bits. Since the cache line size is $512$ bytes = $2^9$ bytes we need $\log_2(2^9) = 9$ bits for the offset. The secondary cache has $2^9$ sets and therefore needs $\log_2(2^9) = 9$ bits for the index. Therefore we have 28 - (9 + 9) = 10 bits for the tag.
+
+\end{document}
