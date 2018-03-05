@@ -1,0 +1,313 @@
+\documentclass[12pt]{article}
+
+%-------------PACKAGES------------- 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{pgfplots}
+\usepackage{float}
+\usepackage{braket}
+\usepackage{titling}
+\usepackage{tikz}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{algorithm,algpseudocode}
+
+%-------------FORMATTING-------------
+\setlength{\droptitle}{-6em} 
+\setlength{\parindent}{0pt}
+ 
+%--------------COMMANDS--------------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+%\renewcommand{\qedsymbol}{\filledbox}
+
+\DeclarePairedDelimiter \abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter \babs{\bigg\lvert}{\bigg\rvert}%
+\DeclarePairedDelimiter \norm{\lVert}{\rVert}%
+
+%------------ENVIRONMENTS------------- 
+\newenvironment{theorem}[2][]{\begin{trivlist}
+\item[{\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Reflection]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%-------------CODE-STYLE------------
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+	language=C++,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\lstset{
+	morekeywords={end}
+}
+
+%------------------------------------ 
+%---------START-OF-DOCUMENT----------
+%------------------------------------
+
+\begin{document}
+ 
+\title{Homework 9}
+\author{David Miller \\ 
+MAP5345: Partial Differential Equations I} 
+ 
+\maketitle
+
+\section*{Problem 1}
+
+\textit{For each function f(x) below, defined on the interval x $\in$ $[-\pi, \pi]$, consider the periodic extension $f_{ext}$(x) : $\R \rightarrow \R$ In each case, answer the following questions:} \\
+\textit{i) Is $f_{ext}(x)$ continuous? Is it piecewise continuous?} \\
+\textit{ii) Is $f^\prime_{ext}(x)$ continuous? Is it piecewise continuous?} \\
+\textit{iii) Is $f_{ext}(x)$ a $C^1$ function?} \\
+\textit{iv) By the convergence theorems we have covered, are you guaranteed pointwise convergence of the Fourier series? Are you guaranteed uniform convergence? Are you guaranteed convergence in $L^2$?} \\ 
+\textit{v) Does the truncated Fourier series exhibit Gibbs phenomenon? If so, at what x values?} \\
+
+\textit{a) $f(x) = \abs{x}$} \\
+
+We have $f_{ext} \in C^0, f^\prime_{ext} \not\in C^0$ but is piecewise continuous. From this $f_{ext} \not\in C^1$. We are guaranteed pointwise but not uniform convergence. The truncated Fourier series does not exhibit Gibb's phenomenon. \\
+
+\textit{b) $f(x) = x$} \\
+
+We have $f_{ext}$ is piecewise continuous, $f^\prime_{ext} \in C^0$. From this $f_{ext} \not\in C^1$. We are guaranteed pointwise convergence but not uniform convergence. The truncated Fourier series does exhibit gibbs phenomenon at the points $n\pi$ for $n \in \mathbb{Z}$. \\
+
+\textit{c) $f(x) = \pi^2 - x^2$} \\
+
+We have $f_{ext} \in C^0, f^\prime_{ext}$ is piecewise continuous. From this we have $f_{ext} \not\in C^1$. We are guaranteed pointwise convergence but not uniform convergence. The truncated Fourier series does nt exhibit Gibb's phenomenon. \\  
+
+\textit{d) $f(x) = \sqrt{\pi^2 - x^2}$} \\
+
+We have $f_{ext} \in C^0, f^\prime_{ext}$ is not even piecewise continuous since it has singularities at the boundaries. From this we have $f_ext \not\in C^1$. We are not guaranteed pointwise or uniform convergence. The truncated Fourier series does not exhibit Gibb's phenomenon. \\
+
+\textit{e) $f(x) = x(\pi^2 - x^2)$} \\
+
+We have $f_{ext} \in C^1, f^\prime_{ext} \in C^0$.From this we have $f_{ext} \in C^1$. We are guaranteed pointwise and uniform convergence. The truncated Fourier series does not exhibit Gibb's phenomenon. \\
+
+\textit{f) $f(x) = (\pi^2 - x^2)^2$} \\
+
+We have $f_{ext} \in C^2, f^\prime_{ext} \in C^1$. From this we have $f_{ext} \in C^2$. We are guaranteed pointwise and uniform convergence. The truncated Fourier series does not exhibit Gibb's phenomenon.
+
+\newpage
+
+\section*{Problem 2}
+
+\textit{Finish the proof of the 'decay-rate theorem' from class, i.e., if $f_{ext} \in C^n$ then a bound on the decay-rate of the Fourier coefficients is given by}
+\begin{align}
+	\abs{c_k} = \frac{M}{\abs{k}^n} \, \text{for all $k$}
+\end{align}
+
+To prove this, we shall use induction. Let $f_{ext} \in C^1$ then we have
+\begin{align*}
+	\mathcal{F}(f^\prime) = \int\limits_{-L}^L f_{ext}^\prime(x) e^{ikx} \,dx = ike^{ikx}f_{ext}(x)\bigg\vert_{-L}^L  - ik\int\limits_{-L}^L f_{ext}(x) e^{ikx} \, dx = -ik\mathcal{F}(f)
+\end{align*}
+where $\mathcal{F}(f)$ is the Fourier transform of $f$. From this we get 
+\begin{align*}
+	\abs{c_k} = \frac{\abs{c_k^\prime}}{\abs{k}}
+\end{align*}
+where we use the fact that if two Fourier series are the same, their coefficients are the same (uniqueness). Now assume $\mathcal{F}(f^{(n)}) = i^nk^n \mathcal{F}(f)$ and let $f_{ext}(x) \in C^{n+1}$ then 
+\begin{align*}
+	\mathcal{F}(f^{(n+1)}) & = \int\limits_{-L}^L f^{(n+1)}_{ext}(x) e^{ikx} \, dx = - ik\int\limits_{L}^L f^{(n)}_{ext}(x) e^{ikx} \, dx = -ik\mathcal{F}(f^{(n)}_k) = -i^{n+1}k^{n+1}\mathcal{F}(f)
+\end{align*}
+where we utilized integration by parts and the first term going to zero since $f^{(n+1)}_{ext}(x)$ must agree on the boundaries. We are now left with
+\begin{align*}
+	\abs{c_k} = \frac{\abs{c_k^{(n+1)}}}{\abs{k}^{n+1}}
+\end{align*}
+where $c_k^{(n+1)}$ can be expressed as
+\begin{align*}
+	\frac{1}{2L}\int\limits_{-L}^L f_{ext}^{(n+1)}(x)e^{inx} \, dx, \quad f^{(n+1)}_{ext}(x) \in C^0.
+\end{align*}
+Since $f_{ext}^{(n+1)}$ is closed and bounded we can bound it above by some constant $M$ and therefore bound the above integral by $M$ times the length of the integral yielding
+\begin{align*}
+	\abs{c_k} = \frac{\abs{c_k^{(n+1)}}}{\abs{k}^{n+1}} \leq \frac{M}{\abs{k}^{n+1}}
+\end{align*}
+
+\newpage
+
+\section*{Problem 3}
+
+\textit{Consider the same 6 functions from problem 1. In each case, determine the largest integer $n$, such that $f_{ext} \in C^n$. Based on this information, what can you say about the decay rate of the Fourier coefficients?} \\
+
+From problem 1 we have 
+
+\begin{align*}
+	f_{ext}(x) & = \abs{x} \in C^0 \\
+	f_{ext}(x) & = x \text{ is piecewise continuous} \\
+	f_{ext}(x) & = \pi^2 - x^2 \in C^0 \\
+	f_{ext}(x) & = \sqrt{\pi^2 - x^2} \in C^0 \\
+	f_{ext}(x) & = x(\pi^2 - x^2) \in C^1 \\
+	f_{ext}(x) & = (\pi^2 - x^2)^2 \in C^2
+\end{align*}
+where these are the largest $n$. Using these values for $n$ we can bound the Fourier coefficients using 
+\begin{align*}
+	f_{ext} \in C^n \Rightarrow \abs{c_k} \leq \frac{M}{k^n} \text{ for some } M \in \mathbb{R}
+\end{align*}
+where we have determined the largest $n$ for our functions. Therefore 
+\begin{align*}
+	c_k & \leq M \text{ for } f(x) = x \\
+	c_k & \leq M \text{ for } f(x) = \pi^2 - x^2 \\
+	c_k & \leq M \text{ for } f(x) = \sqrt{\pi^2 - x^2} \\
+	c_k & \leq \frac{M}{k} \text{ for } x(\pi^2 - x^2) \\
+	c_k & \leq \frac{M}{k^2} \text{ for } (\pi^2 - x^2)^2
+\end{align*}
+
+\newpage
+
+\section*{Problem 4}
+
+\textit{Suppose we have a function $f(x)$ on the interval $0 < x < L$ that is not even continuous, but it has a finite $L^2$ norm. Note that we are guaranteed that the Fourier series of $f(x)$ converges in $L^2$. Someone comes into the room and says they have calculated the Fourier coefficients $c_n$ and found that}
+\begin{align}
+	\abs{c_n} = 1/\sqrt{n} \, \text{for $n > 1$}
+\end{align}
+\textit{Without checking their tedious calculation, can you say why this result must be wrong?} \\
+
+From previous homeworks we know that the coefficients will be $a_n = \frac{2}{\sqrt{n}}$ and $b_n = 0$. Applying Perseval's equality yields
+\begin{align*}
+	\norm{f}_2^2 = \sum\limits_{n=1}^\infty A_n^2 \norm{X_n}_2^2 = \sum\limits_{n=1}^\infty \frac{4}{n}\norm{cos(\frac{n\pi x}{L})}_2^2
+\end{align*}
+where $\norm{cos(\frac{n\pi x}{L})}_2^2 = \braket{cos(\frac{n\pi x}{L}), cos(\frac{n\pi x}{L})} = L$. Plugging this back in we get 
+\begin{align*}
+	\norm{f}_2^2 = \sum\limits_{n=1}^\infty \frac{4L}{n}.
+\end{align*}
+We know the left side of Perseval's equality converges but the right side diverges by the $p-$series test. Therefore $c_n = 1/\sqrt{n}$ can not be the correct coefficients.
+
+\newpage
+
+\section*{Problem 5}
+
+\textit{Consider the heat conduction in a rod on the interval $x \in [0,L]$ with vanishing Dirichlet boundary conditions. As done in class, consider an initial condition $u_0(x)$ that is 'sufficiently smooth', and consider its odd reflection $f(x)$ defined on the interval $[-L,L]$.} \\
+
+\textit{a) Prove that $f_{ext}$ is $C^1$ and that $f^{\prime\prime}_{ext}$ is piecewise continuous.} \\
+
+Applying the odd reflection we get 
+\begin{align*}
+	f_{ext}(x) = 
+	\begin{cases}
+	u_0(x) & x \in (0,L) \\
+	-u_0(-x) & x \in (-L,0) \\
+	0 & x = n\pi
+	\end{cases}
+\end{align*}
+Taking the derivative we get 
+\begin{align*}
+	f^\prime_{ext}(x) = 
+	\begin{cases}
+	u^\prime_0(x) & x \in (0 + 2Ln,L + 2Ln) \\
+	u^\prime_0(-x) & x \in (-L + 2Ln,0 + 2Ln) \\
+	\end{cases}
+\end{align*}
+We just need to verify that the derivative on the boundaries match. To verify this we take the limit
+\begin{align*}
+	& f^\prime_{ext}(0) = \lim_{x \rightarrow 0^+} f^\prime_{ext}(x) = u^\prime_0(0) = \lim_{x \rightarrow 0^-} f_{ext}^\prime(x) = f^\prime_{ext}(0) \\
+	& f^\prime_{ext}(L) = \lim_{x \rightarrow L^-} f^\prime_{ext}(x) = u^\prime(L) = \lim_{x \rightarrow -L^+} f^\prime_{ext}(-L) = f^\prime_{ext}(-L)
+\end{align*}
+Since the derivative match at the boundaries and $f^\prime_{ext}(x)$ is continuous we have that $f_{ext}(x) \in C^1$. Taking the second derivative we get 
+\begin{align*}
+	f^{\prime\prime}_{ext}(x) = 
+	\begin{cases}
+	u^{\prime\prime}(x) & x \in (0,L) \\
+	-u^{\prime\prime}_0(x) & x \in (-L,0)
+	\end{cases}
+\end{align*}
+Taking the limit again to determine derivative values at the boundaries we get
+\begin{align*}
+	& f^{\prime\prime}_{ext}(0) = \lim_{x \rightarrow 0^+} f^{\prime\prime}_{ext}(x) = u^{\prime\prime}_0(0) \neq -u^{\prime\prime}_0(0) = \lim_{x \rightarrow 0^-} f_{ext}^{\prime\prime}(x) = f^{\prime\prime}_{ext}(0) \\
+	& f^{\prime\prime}_{ext}(L) = \lim_{x \rightarrow L^-} f^{\prime\prime}_{ext}(x) = u^{\prime\prime}_0(L) \neq -u^{\prime\prime}_0(-L) = \lim_{x \rightarrow -L^+} f_{ext}^{\prime\prime}(x) = f^{\prime\prime}_{ext}(L)  
+\end{align*}
+From the above we can see that $f^{\prime\prime}_{ext}(x)$ is piecewise continuous. \\	
+
+\textit{b) How smooth precisely does $u_0(x)$ have to be for this all to work out?} \\
+
+The function $u_0(x)$ must be at least $C^2$ since $u_0^{\prime\prime}(x)$ is continuous on $(0,L)$ ( $f_{ext}^{\prime\prime}$ piecewise continuous).
+
+\newpage
+`
+\section*{Problem 6}
+
+\textit{Consider the wave equation with vanishing Neumann boundary conditions}
+\begin{align}
+	u_{tt} - c^2u_{xx} & = u_0(x) \quad \text{for } 0 < x < L, \, t > 0 \\
+	u_x(0,t) & = u_x(L,t) = 0 \quad \text{for } t > 0
+\end{align}
+\textit{and initial conditions}
+\begin{align}
+	u(x,0) & = u_0(x) \quad \text{for } 0 < x < L \\
+	u_t(x,t) & = \dot{u}_0(x) \quad \text{for } 0 < x < L
+\end{align} 
+
+\textit{a) By using reflections and the Fourier convergence theorems, show that the eigenfunctions from separation of variables are complete in the space of all 'sufficiently smooth' initial conditions.} \\
+
+For this problem we essentially need to prove that the eigenfunctions span the space of all 'sufficiently smooth' initial conditions. We can do this by proving $f_{ext}(x)$ (eigenfunction extension) is at least pointwise convergent. The spatial eigenfunction we get for this problem results from the eigenvalue problem
+\begin{align*}
+	X^{\prime\prime} & + \lambda X = 0 \\
+	u_x(0,t) &= u_x(L,t) = 0 
+\end{align*}
+resulting in $X_n = cos(\frac{n\pi x}{L})$. Applying even extension to our eigenfunction we get
+\begin{align*}
+	f_{ext}(x) = 
+	\begin{cases}
+	cos(\frac{n\pi x}{L}) & x \in (0,L) \\
+	cos(-\frac{n\pi x}{L}) & x \in (-L,0)
+	\end{cases}
+\end{align*}
+We can quickly check that $f_{ext}(x)$ is continuous
+\begin{align*}
+	& f_{ext}(0) = \lim_{x \rightarrow 0^+} f_{ext}(x) = cos(0) = \lim_{x \rightarrow 0^-}f_{ext}(x) = f_{ext}(0) \\
+	& f_{ext}(-L) = \lim_{x \rightarrow -L^+} f_{ext}(x) = cos(n\pi) = \lim_{x \rightarrow L^-} f(x) = f_{ext}(L)
+\end{align*}
+which confirms $f_{ext}$ is continuous. We also have that $f^\prime_{ext}(x)$ is continuous by the Neumann boundary conditions. Checking $f^{\prime\prime}_{ext}(x)$ we get
+\begin{align*}
+	f^{\prime\prime}_{ext}(x) = 
+	\begin{cases}
+	-\frac{L^2}{n^2\pi^2}cos(\frac{n\pi x}{L}) & x \in (0,L) \\
+	-\frac{L^2}{n^2\pi^2}cos(-\frac{n\pi x}{L}) & x \in (-L,0)
+	\end{cases}
+\end{align*}
+from which we can verify boundary values match
+\begin{align*}
+	& f^{\prime\prime}_{ext}(0) = \lim_{x \rightarrow 0^+} f^{\prime\prime}_{ext}(x) = -\frac{L^2}{n^2\pi^2}cos(0) = \lim_{x \rightarrow 0^-} f^{\prime\prime}_{ext}(x) = f^{\prime\prime}_{ext}(0) \\
+	& f^{\prime\prime}_{ext}(-L) = \lim_{x \rightarrow -L^+} f^{\prime\prime}(x) = -\frac{L^2}{n^2\pi^2}cos(n\pi) = \lim_{x \rightarrow x L^-}f^{\prime\prime}(x) = f^{\prime\prime}_{ext}(L)
+\end{align*}
+Therefore we have that $f_{ext}(x), f^\prime_{ext}(x),$ and $f^{\prime\prime}_{ext}(x)$ and thus 
+\begin{align}
+	u_0(x) = \sum\limits_{n=0}^\infty A_nX_n
+\end{align} 
+is uniformly convergent. This implies our eigenfunctions span the space of our 'sufficiently smooth' initial conditions. \\
+
+\textit{b) If $u_0(x)$ and $\dot{u}_0(x)$ are both $C^\infty$, can you say how smooth the solution $u(x,t)$ will be at later times? What if $u_0(x)$ and $\dot{u}_0(x)$ are only $C^n$ for some $n > 0$?} \\
+
+Since out temporal eigenfunctions $T_n$ are $C^\infty$ the smoothness of our solution $u(x,t)$ is the smoothness of $u_0(x)$ and $\dot{u}_0(x)$. This is because the general solution $u(x,t)$ has the form
+\begin{align*}
+	u(x,t) = \sum\limits_{n=0}^\infty T_n(t)X_n(x)
+\end{align*} 
+and its smoothness is therefore limited by the smoothness of $u_0(x)$ and $\dot{u}_0(x)$.
+
+\end{document}

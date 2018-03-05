@@ -1,0 +1,301 @@
+\documentclass[12pt]{article}
+
+%-------------PACKAGES------------- 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{pgfplots}
+\usepackage{float}
+\usepackage{braket}
+\usepackage{titling}
+\usepackage{tikz}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{algorithm,algpseudocode}
+
+%-------------FORMATTING-------------
+\setlength{\droptitle}{-6em} 
+\setlength{\parindent}{0pt}
+ 
+%--------------COMMANDS--------------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+%\renewcommand{\qedsymbol}{\filledbox}
+
+\DeclarePairedDelimiter \abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter \norm{\lVert}{\rVert}%
+
+%------------ENVIRONMENTS------------- 
+\newenvironment{theorem}[2][]{\begin{trivlist}
+\item[{\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Reflection]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%-------------CODE-STYLE------------
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+	language=C++,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\lstset{
+	morekeywords={end}
+}
+
+%------------------------------------ 
+%---------START-OF-DOCUMENT----------
+%------------------------------------
+
+\begin{document}
+ 
+\title{Homework 7}
+\author{David Miller \\ 
+MAP5345: Partial Differential Equations I} 
+ 
+\maketitle
+
+\section*{Problem 1}
+
+\textit{Consider the beam equation for the vertical deflection u(x,t) of an elastic beam}
+\begin{align}
+	u_{tt} + Ku_{xxxx} = 0, \quad \text{for } 0 < x < L
+\end{align}
+\textit{where K $>$ 0 is a constant. Suppose the boundary conditions are given by}
+\begin{align}
+	u(0,t) = u_x(0,t) = 0 \\
+	u_{xx}(L,t) = u_{xxx}(L,t) = 0
+\end{align}
+\textit{and the initial conditions are}
+\begin{align}
+	u(x,0) = u_0(x) \\
+	u_t(x,0) = \dot{u}_0(x)
+\end{align}
+\textit{Use separation of variables to find the general solution to the PDE.} \\
+
+Assuming our solution $u(x,t)$ can be expressed in product form $X(x))T(t)$ we get the following
+\begin{align*}
+	X(x)\frac{d^2X(x)}{dx^2} + KX(x)\frac{d^4T(t)}{dt^4} = 0
+\end{align*}
+where this can only be true if they equal some constant. Setting them equal to $\lambda$ we arrive at the differential equations
+\begin{align*}
+	& -\frac{1}{KT(t)}\frac{d^2T(t)}{dt^2} = \frac{1}{X(x)}\frac{d^4X(x)}{dx^4} = -\lambda
+\end{align*}
+Solving for $T(t)$ we get
+\begin{align*}
+	T(t) = Acos&(\sqrt{K\lambda}t) + Bsin(\sqrt{K\lambda t}) \\
+	u(x,0) = u_0 \Rightarrow A = u_0&(x), \quad u_t(x,0) = \dot{u}_0(x) \Rightarrow B = \dot{u}_0(x)
+\end{align*}
+and then solving for $X(x)$ using the boundary conditions we get
+\begin{align*} 
+&\begin{pmatrix}
+	1 & 0 & 1 & 0 \\
+	0 & 1 & 0 & 1 \\
+	-cos(\sqrt[4]{\lambda}L) & -sin(\sqrt[4]{\lambda}L) & cosh(\sqrt[4]{\lambda}L) & sinh(\sqrt[4]{\lambda}L) \\
+	sin(\sqrt[4]{\lambda}L) & -cos(\sqrt[4]{\lambda}L) & 
+	sinh(\sqrt[4]{\lambda}L) & cosh(\sqrt[4]{\lambda}L)
+\end{pmatrix}
+\begin{pmatrix}
+C \\ D \\ E \\ F
+\end{pmatrix} =
+\begin{pmatrix}
+0 \\ 0 \\ 0 \\ 0
+\end{pmatrix}
+\end{align*}
+where we use the fact that the spatial eigenfucntion is 
+\begin{align*}
+	X(x) = Ccos(\sqrt[4]{\lambda}x) + Dsin(\sqrt[4]{\lambda}x) + Ecosh(\sqrt[4]{\lambda}x) + Fsinh(\sqrt[4]{\lambda}x).
+\end{align*}
+From the first two rows of the linear system we get that $C = -E$ and $D = -F$. We can then rewrite the linear system as 
+\begin{align*}
+\begin{pmatrix}
+(cosh(\sqrt[4]{\lambda}L) + cos(\sqrt[4]{\lambda}L)) & (sinh(\sqrt[4]{\lambda}L) + sin(\sqrt[4]{\lambda}L)) \\
+(sin(\sqrt[4]{\lambda}L) - sinh(\sqrt[4]{\lambda}L)) & (cosh(\sqrt[4]{\lambda}L) + cos(\sqrt[4]{\lambda}L))
+\end{pmatrix}
+\begin{pmatrix}
+C \\ D
+\end{pmatrix} = 
+\begin{pmatrix}
+0 \\ 0
+\end{pmatrix}
+\end{align*}
+From the above linear system we get that 
+	\begin{align*}
+	D = -C\frac{cosh(\sqrt[4]{\lambda}L) + cos(\sqrt[4]{\lambda}L)}{sinh(\sqrt[4]{\lambda}L) + sin(\sqrt[4]{\lambda}L)} 
+\end{align*}
+where we will denote the above as $-CD_n$ so it does not become cumbersome. We also need to determine $\lambda_n$ and we can do so by setting the determinant of the above matrix to zero. We do this to avoid the trivial solution. Doing so gives us the 
+\begin{align*}
+	(cosh(\sqrt[4]{\lambda}L) + cos(\sqrt[4]{\lambda}L)&)^2 - (sinh(\sqrt[4]{\lambda}L) - sin(\sqrt[4]{\lambda}L))(sinh(\sqrt[4]{\lambda}L) + sin(\sqrt[4]{\lambda}L)) = 0 \\
+	& \Rightarrow \lambda_n: \, cos(\sqrt[4]{\lambda_n}L)cosh(\sqrt[4]{\lambda_n}L) = -1
+\end{align*}
+Now we can derive the general solution
+\begin{gather*}
+	u(x,t) = \sum\limits_{n=1}^\infty A_nT_n(t)X_n(x) \\
+	T_n(t) = u_0(x)cos(\sqrt{K\lambda_n}t) + \dot{u}_0(x)sin(\sqrt{K\lambda_n}t) \\
+	X_n(x) = \bigg[\bigg(cosh(\sqrt[4]{\lambda_n}x) - cos(\sqrt[4]{\lambda_n}x)\bigg) - D_n\bigg(sinh(\sqrt[4]{\lambda_n}x) - sin(\sqrt[4]{\lambda_n}x)\bigg)\bigg] 
+\end{gather*}
+where the coefficients $A_n$ can be found by projection against our spatial eigenfunction $X_m$.
+
+\newpage
+
+\section*{Problem 2} 
+\textit{Consider the interval 0 $<$ x $<$ 5. In each case, calculate the $L^1, L^2,$ and $L^\infty$ norm of each function on the interval (0,5):} \\ \\
+\textit{(a) $f(x) = x(x-5)$} \\
+
+The $\norm{f(x)}_1, \norm{f(x)}_2,$ and $\norm{f(x)}_\infty$ over $D = (0,5)$ are
+\begin{align*}
+	\norm{f(x)}_1 & = \int_D \abs{f(x)} \, dx = \int\limits_0^5 \abs{x(x-5)} \,dx = \bigg(-\frac{1}{3}x^3 + \frac{5}{2}x^2\bigg)\bigg\vert_0^5 = \frac{125}{6} \\
+	\norm{f(x)}_2 & = \bigg(\int_D \abs{x(x-5)}^2 \, dx\bigg)^{1/2} = \bigg(\int\limits_0^5 (x^2 - 5x)^2 \, dx\bigg)^{1/2} = \bigg(\frac{1}{5}x^5 - \frac{5}{2}x^4 +
+	\frac{25}{3}x^3\bigg\vert_0^5\bigg)^{1/2} \\
+	& = \bigg(5^4 - \frac{5^5}{2} + \frac{5^5}{3}\bigg)^{1/2} = \sqrt{\frac{625}{6}} = \frac{25\sqrt{6}}{6} \\
+\end{align*}
+To calculate $\norm{f(x)}_\infty = \sup\limits_{x \in \bar{D}} \abs{f(x)}$, where $\bar{D}$ is the closure of $D$, we can graph the function $\abs{x(x-5)}$ and visually determine it. 
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	axis line style = thick,
+	xmin = 0,
+	xmax = 5,
+	axis lines = middle,
+	label style =
+	{at={(ticklabel cs:1.1)}}
+	]
+	\addplot [only marks] table {
+	};
+	\addplot [domain=0:5, samples=100, black, very thick] ({x}, {-x*x + 5*x});
+	\end{axis}	
+	\end{tikzpicture}
+	\caption{Plot of $\abs{f(x)} = \abs{x^2 - 5x}$}
+\end{figure}
+From the graph we can see that $\norm{f(x)}_\infty$ occurs at the vertex $x = 2.5$, so $\norm{f(x)}_\infty = 6.25$. It is also easy to determine this value since extrema for a parabola happen at its vertex. \\
+
+\newpage
+
+\textit{(b) $f(x) = x^{-1/2}$} \\ 
+
+The $\norm{f(x)}_1, \norm{f(x)}_2,$ and $\norm{f(x)}_\infty$ over $D = (0,5)$ are
+\begin{align*}
+	\norm{f(x)}_1 & = \int_D \abs{f(x)} \, dx = \int\limits_0^5 \abs{x^{-1/2}} \, dx = 2\sqrt{x} \, \bigg\vert_0^5 = 2\sqrt{5} \\
+	\norm{f(x)}_2 & = \bigg(\int_D \abs{f(x)}^2 \, dx\bigg)^{1/2} = \bigg(\int\limits_0^5 \abs{x^{-1/2}}^2 \, dx\bigg)^{1/2} = ln(x) \,\bigg\vert_1^5 - ln(x)\,\bigg\vert_0^1 = ln(4) + \infty = \infty
+\end{align*}
+To calculate $\norm{f(x)}_\infty = \sup\limits_{x \in \bar{D}} \abs{f(x)}$, where $\bar{D}$ is the closure of $D$, we can graph the function $\abs{1/\sqrt{x}}$ and visually determine it. 
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	axis line style = thick,
+	xmin = 0,
+	xmax = 5,
+	axis lines = middle,
+	label style =
+	{at={(ticklabel cs:1.1)}}
+	]
+	\addplot [only marks] table {
+	};
+	\addplot [domain=0.01:5, samples=100, black, very thick] ({x}, {1/sqrt(x)});
+	\end{axis}	
+	\end{tikzpicture}
+	\caption{Plot of $\abs{f(x) = \abs{x^{-1/2}}}$}
+\end{figure}
+We can see from the graph that $x = 0$ so then $\norm{f(x)}_\infty = \infty$. We can also determine this analytically by simply realizing that the derivative $f^\prime(x) = -\frac{1}{2}x^{-3/2}$ is decreasing over our interval $D$ so the left bound must be the maximum value. \\
+
+\newpage
+
+\textit{(c) $f(x) = e^{-kx}$} \\ 
+
+The $\norm{f(x)}_1, \norm{f(x)}_2,$ and $\norm{f(x)}_\infty$ over $D = (0,5)$ are
+\begin{align*}
+	\norm{f(x)}_1 & = \int_D \abs{f(x)} \, dx = \int\limits_0^5 \abs{e^{-kx}} \, dx = -\frac{1}{k}e^{-kx} \, \bigg\vert_0^5 = -\frac{1}{k}(e^{-5k} - 1) \\
+	\norm{f(x)}_2 & = \bigg(\int_D\abs{f(x)}^2\,dx\bigg)^{1/2} = \bigg(\int\limits_0^5\abs{e^{-kx}}^2\,dx\bigg)^{1/2} = \sqrt{-\frac{1}{2k}e^{-2k}\bigg\vert_0^5} = \sqrt{-\frac{1}{2k}(e^{-10k} - 1)}
+\end{align*}
+To calculate $\norm{f(x)}_\infty = \sup\limits_{x \in \bar{D}} \abs{f(x)}$, where $\bar{D}$ is the closure of $D$, we can graph the function $\abs{e^{-kx}}$ and visually determine it.
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	axis line style = thick,
+	xmin = 0,
+	xmax = 5,
+	axis lines = middle,
+	label style =
+	{at={(ticklabel cs:1.1)}}
+	]
+	\addplot [only marks] table {
+	};
+	\addplot [domain=0:5, samples=100, black, very thick] ({x}, {exp(2*x)});
+	\end{axis}	
+	\end{tikzpicture}
+	\begin{tikzpicture}
+	\begin{axis}[
+	axis line style = thick,
+	xmin = 0,
+	xmax = 5,
+	axis lines = middle,
+	label style =
+	{at={(ticklabel cs:1.1)}}
+	]
+	\addplot [only marks] table {
+	};
+	\addplot [domain=0:5, samples=100, black, very thick] ({x}, {exp(-2*x)});
+	\end{axis}	
+	\end{tikzpicture}
+	\caption{Plot of $\abs{f(x)} = \abs{e^{kx}}$ (left) and $\abs{f(x)} = \abs{e^{-kx}}$ (right) for $k=2$}.
+\end{figure}
+For the graphs in figure 3, we have set the value $k = 2$, but the graphs describe the general behavior for $k > 0$ (right) and $k < 0$ (left). So we have that 
+$$ \norm{f(x)}_\infty = \begin{cases}
+1, & k < 0 \\
+e^{5k}, & k > 0 \\
+1, & k = 0
+\end{cases} $$
+This can also be check analytically by showing $f^\prime(x) = -ke^{-kx}$ and is therefore strictly increasing for $k < 0$, strictly decreasing if $k > 0$ and constant if $k = 0$. Therefore we pick the left and right bounds for $\norm{f(x)}_\infty$.
+
+\newpage
+
+\section*{Problem 3}
+\textit{Suppose $f(x): (a,b) \rightarrow \mathbb{R}$, where $(a,b)$ is a finite interval. Suppose that $f_n(x)$ converges uniformly to $f(x)$ on the interval $(a,b)$ as $n \rightarrow \infty$.} \\
+
+\textit{(a) Show that $f_n(x)$ must also converge pointwise to $f(x)$ on the interval $(a,b)$.} \\ 
+
+Pointwise convergence follows trivially from uniform convergence. To show pointwise convergence, it must be shown that given any $\epsilon > 0$ we can find some $N$ so that for all $n > N$ we have $\abs{f_n(x) - f(x)} < \epsilon$ for all $x$. However, if we are given uniform convergence we are already given such an $N$ no matter the choice of $x$. Thus uniform convergence implies pointwise convergence. \\
+
+\textit{(b) Show that $f_n(x)$ must also converge to $f(x)$ in the $L^2$ norm.} \\ 
+
+Since we have uniform convergence we know that $\sup\limits_{x\in(a,b)}\abs{f_n(x) - f(x)} \rightarrow 0$, then
+\begin{align*}
+	\norm{f_n(x) - f(x)}_2 = \bigg(\int\limits_a^b \abs{f_n{x} - f(x)}^2 \, dx\bigg)^{1/2} \leq C\sup\limits_{x\in(a,b)}\abs{f_n(x) - f(x)} \rightarrow 0
+\end{align*}
+where $C = \sqrt{b-a}$. Therefore we have uniform convergence implies $L^2$ convergence. \\
+
+\textit{(c) Now consider an unbounded interval. Does uniform convergence still imply pointwise convergence? Does it imply $L^2$ convergence? If not, give a counterexample.} \\
+
+By definition of uniform convergence, we take an arbitrary set $D$ for all $x$ to converge and therefore has no dependence on whether it is bounded or not. Therefore uniform convergence still implies pointwise if $D$ is unbounded..  
+ 
+\end{document}

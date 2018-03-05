@@ -1,0 +1,257 @@
+\documentclass[12pt]{article}
+
+%-------------PACKAGES------------- 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{pgfplots}
+\usepackage{float}
+\usepackage{braket}
+\usepackage{titling}
+\usepackage{tikz}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{algorithm,algpseudocode}
+
+%-------------FORMATTING-------------
+\setlength{\droptitle}{-6em} 
+\setlength{\parindent}{0pt}
+ 
+%--------------COMMANDS--------------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+%\renewcommand{\qedsymbol}{\filledbox}
+
+\DeclarePairedDelimiter \abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter \norm{\lVert}{\rVert}%
+
+%------------ENVIRONMENTS------------- 
+\newenvironment{theorem}[2][]{\begin{trivlist}
+\item[{\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Reflection]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%-------------CODE-STYLE------------
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+	language=C++,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\lstset{
+	morekeywords={end}
+}
+
+%------------------------------------ 
+%---------START-OF-DOCUMENT----------
+%------------------------------------
+
+\begin{document}
+ 
+\title{Homework 5}
+\author{David Miller \\ 
+MAP5345: Partial Differential Equations 5} 
+ 
+\maketitle
+
+\textit{1. Consider the vector space $\mathbb{R}^n$ = $\{ {\scriptstyle{\mathcal{V}}} = ( {\scriptstyle{\mathcal{V}_1}}, \ldots, {\scriptstyle{\mathcal{V}_n}} ) \text{ such that } {\scriptstyle{\mathcal{V}_1}} \in \mathbb{R}, \ldots, {\scriptstyle{\mathcal{V}_n}} \in \mathbb{R} \}$ and consider the dot product ${\scriptstyle{\mathcal{U}}} \cdot {\scriptstyle{\mathcal{V}}} = {\scriptstyle{\mathcal{U}_1}}{\scriptstyle{\mathcal{V}_1}} + \ldots + {\scriptstyle{\mathcal{U}_n}}{\scriptstyle{\mathcal{V}_n}}$. Verify that the dot product is an inner product.} \\
+
+\begin{proof}
+Let $u,v, w$ be in the vector space $\mathbb{R}^n$ and $\alpha$ be some scalar in $\mathbb{R}$. Letting $\braket{u,v}$ be the dot product we get
+\begin{align*}
+	\braket{u + v, w} & = (u_1 + v_1)w_1 + \ldots + (u_n + v_n)w_n \\
+	& = u_1w_1 + v_1w_1 + \ldots + u_nw_n + v_nw_n = \braket{u,w} + \braket{v,w} \\ \\
+	\braket{\alpha u,v} & = \alpha u_1v_1 + \ldots + \alpha u_nv_n  = \alpha(u_1v_1 + \ldots + u_nv_n) = \alpha\braket{u,v} \\ \\
+	\braket{u,v} & = u_1v_1 + \ldots + u_nv_n  = v_1u_1 + \ldots + v_nu_n = \braket{v,u} \\ \\
+	\braket{u,u} & = u_1^2 + \ldots + u_n^2 = 
+	\begin{cases}
+	>0 & u_i \neq 0 \text{ for some } i \\
+	0 & u_i = 0 \, \forall \, i
+	\end{cases}
+\end{align*}
+From this we can see that the dot product is an inner product.  \\
+\end{proof}
+
+\newpage
+
+\textit{2. Consider the function spaces}
+\begin{align*}
+& \mathcal{F} = \{ f: [0,L] \rightarrow \mathbb{R} \text{ such that  } f, f^\prime,f^{\prime\prime} \text{ are continuous, and } f(0) = f(L) = 0. \} \\
+& \mathcal{G} = \{ g: [0,L] \rightarrow \mathbb{R} \text{ such that } g, g^\prime, g^{\prime\prime} \text{ are continuous, and } g^\prime(0) = g^\prime(L) = 0 \}
+\end{align*}
+\textit{Show that $\mathcal{F}$ and $\mathcal{G}$ are vector spaces over $\mathbb{R}$ and over $\mathbb{C}$.} \\
+
+Since $f(x), (x)$ are elements of the fields we define our vector space over, they inherit the axioms of the fields. Let $f_1,f_2,f_3 \in \mathcal{F}$ and $g_1,g_2,g_3 \in \mathcal{G}$ with some constant $\alpha = \beta + i\gamma$ in $\mathbb{C}$ such that $\beta, \gamma \in \mathbb{R}$. Let us redefine the notation for $f,g$
+\begin{align*}
+	[]
+\end{align*}
+
+\newpage
+
+\textit{3. Consider $\mathcal{F}$ as defined above. For two functions $u(x), v(x) \in \mathcal{F}$, let}
+\begin{align*}
+	\braket{u,v} = \int\limits_0^L u(x)v(x) \, dx
+\end{align*}
+\textit{Verify that the operation $\braket{\cdot, \cdot}$ is an inner product on $\mathcal{F}$ over $\mathbb{R}$.} \\
+\begin{proof}
+	Let $u(x), v(x), w(x) \in \mathcal{F}$ with some scalar in $\mathbb{R}$. Then we have 
+	\begin{align*}
+		\braket{u+v,w} & = \int\limits_0^L (u(x) + v(x))w(x) \, dx = \int\limits_0^L u(x)w(x) \, dx + \int\limits_0^L v(x)w(x) \, dx = \braket{u,w} + \braket{v,w} \\ \\
+		\braket{\alpha u, v} & = \int\limits_0^L \alpha u(x)v(x) \, dx = \alpha\int\limits_0^L u(x)v(x) \, dx = \alpha\braket{u,v} \\ \\
+		\braket{u,v} & = \int\limits_0^L u(x)v(x) \, dx = \int\limits_0^L v(x)u(x) \, dx = \braket{v,u} \\ \\
+		\braket{u,u} & = \int\limits_0^L u(x)u(x) \, dx = \int\limits_0^L u^2(x) \, dx = 
+		\begin{cases}
+		>0 & u \neq 0 \\
+		0 & u = 0
+		\end{cases}
+	\end{align*}
+\end{proof}
+
+\newpage
+
+\textit{4. Consider the same setup as in 3, but with $\mathcal{F}$ a vector space over $\mathbb{C}$. Let}
+\begin{align*}
+	\braket{u,v} = \int\limits_0^L u(x)\overline{v(x)} \, dx
+\end{align*}
+\textit{Verify that $\braket{\cdot, \cdot}$ is an inner product on $\mathcal{F}$ over $\mathbb{C}$.} \\ 
+
+\begin{proof}
+Let $u(x), v(x), w(x) \in \mathcal{F}$ with some scalar $\alpha = \beta + i\gamma$ in $\mathbb{C}$. Then we have 
+\begin{align*}
+	\braket{u + v, w} & = \int\limits_0^L \bigg(u(x) + v(x)\bigg) \overline{w(x)} \, dx = \int\limits_0^L u(x)\overline{w(x)} \, dx + \int\limits_0^L v(x)\overline{w(x)} \, dx = \braket{u,w} + \braket{v,w} \\ \\
+	\braket{u,v+w} & = \int\limits_0^L u(x)\bigg(\overline{v(x) + w(x)}\bigg) \, dx  = \int\limits_0^L u(x)\bigg(\overline{v(x)} + \overline{w(x)}\bigg) \, dx \\
+	& = \int\limits_0^L u(x)\overline{v(x)} \, dx + \int\limits_0^L u(x)\overline{w(x)} \, dx = \braket{u,v} + \braket{u,w} \\ \\
+	\braket{\alpha u,v} & = \int\limits_0^L \alpha u(x) \overline{v(x)} \, dx  = \alpha\int\limits_0^L u(x)\overline{v(x)} = \alpha\braket{u,v} \\ \\	
+	\braket{u,\alpha v} & = \int\limits_0^L u(x)\overline{\alpha v(x)} \, dx = \overline{\alpha}\int\limits_0^L u(x)\overline{v(x)} \, dx = \overline{\alpha}\braket{u,v} \\ \\
+	\overline{\braket{v,u}} & = \int\limits_0^L \overline{v(x)\overline{u(x)}} \, dx = \int\limits_0^L \overline{v(x)}u(x) \, dx = \int\limits_0^L u(x)\overline{v(x)} \, dx = \braket{u,v} \\ \\
+	\braket{u,u} & = \int\limits_0^L u(x)\overline{u(x)} \, dx = \int\limits_0^L \mathcal{R}(u(x))^2 + \mathcal{I}(u(x))^2 \, dx	=
+	\begin{cases}
+		>0 & u(x) \neq 0 \\
+		=0 & u(x) = 0
+	\end{cases}
+\end{align*}
+where we use $\mathcal{R}(u(x)), \mathcal{I}(u(x))$ as the real and imaginary part of $u(x)$, respectively. \\
+\end{proof}
+
+\newpage
+
+\textit{5. Let $\braket{\cdot, \cdot}$ be an inner product on a vector space V. For any $v \in V$, let $\norm{v} = \sqrt{\braket{v,v}}$. Prove that $\norm{\cdot}$ is a norm.} 
+\begin{proof}
+	Let $v,w \in V$ then we have
+	\begin{align*}
+		\norm{v} & = \sqrt{\braket{v,v}} =
+		\begin{cases}
+			>0 & v \neq 0 \\
+			0 & v = 0
+		\end{cases} \\
+		\norm{kv} & = \sqrt{\braket{kv,kv}} = \sqrt{k\braket{v,kv}} = 	 \sqrt{k^2\braket{v,v}} = \abs{k}\sqrt{\braket{v,v}} = \abs{k}\braket{v,v} \\
+		\norm{v + w} & = 
+	\end{align*} 
+\end{proof}
+
+\newpage
+
+\textit{6. Consider the inner product for complex-valued functions on the interval $(-L,L)$,}
+\begin{align*}
+	\braket{f,g} = \int\limits_{-L}^{L} f(x)\overline{g(x)} \, dx
+\end{align*}
+\textit{a) Consider the functions $X_n(x) = e^{in\pi x/L}$. Prove that $X_n$ and $X_m$ are orthogonal for all integers $n,m$ such that $n \neq m$.} \\
+\begin{proof}
+	\begin{align*}
+		\braket{X_m, X_n} & = \int\limits_{-L}^L e^{im\pi x/L}e^{in\pi x/L} \, dx \\
+		& = \int\limits_{-L}^L cos((m+n)\pi x/L) + isin((m+n)\pi x/L) \, dx \\
+		& = \bigg(\frac{L}{(m+n)\pi}\underbrace{sin((m+n)\pi x/L)}_{\text{= 0}} - \frac{L}{(m+n)\pi}cos((m+n)\pi x/L)\bigg)\bigg\vert_{-L}^L \\
+		& = \frac{L}{(m+n)\pi}(cos(-(m+n)\pi) - cos((m+n)\pi)) = 0
+	\end{align*}
+\end{proof}
+\textit{b) Find the $L_2$-norm of each of the functions.} \\
+\begin{align*}
+	\braket{X_n,X_n} = \bigg(\int\limits_{-L}^L e^{in\pi x/L}e^{-in\pi x/L} \, dx \bigg)^{1/2} = \bigg(\int\limits_{-L}^L 1 \, dx \bigg)^{1/2} = \bigg(x\bigg\vert_{-L}^L\bigg)^{1/2} = \sqrt{2L}
+\end{align*}
+
+\newpage
+
+\textit{7. Consider the vector space of all differentiable functions on a fixed interval. Define}
+\begin{align*}
+	D[f] = \frac{df}{dx}
+\end{align*}
+\textit{Show that $D$ is a linear operator. What is the target space?} \\ \\
+
+\newpage
+
+\textit{8. Let $V$ be a vector space and let $\mathcal{L}_1$ and $\mathcal{L}_2$ be liner operators for $V$ to itself.} \\
+\textit{a) Prove hat $a\mathcal{L}_1 + b\mathcal{L}_2$ is also a linear operator for any $a,b \in \mathbb{R}$}.
+
+\begin{proof}
+	Let $u v \in V$ and $\mathcal{L}^\prime = a\mathcal{L}_1 + b\mathcal{L}_2$. We then have 
+	\begin{align*}
+		\mathcal{L}^\prime(k_1u + k_2v) & = a\mathcal{L}_1(k_1u + k_2v) + b\mathcal{L}_2(k_1u + k_2v) \\
+		& = a\mathcal{L}_1(k_1u) + a\mathcal{L}_1(k_2v) + b\mathcal{L}_1(k_1u) + b\mathcal{L}_2(k_2v) \\
+		& = ak_1\mathcal{L}_1(u) + ak_2\mathcal{L}_1(v) + bk_1\mathcal{L}_2(u) + bk_2\mathcal{L}_1(v) \\
+		& = k_1\mathcal{L}^\prime(u) + k_2\mathcal{L}^\prime(v)
+	\end{align*}
+\end{proof}
+
+\textit{b) Prove that $\mathcal{L}_1 \circ \mathcal{L}_2$ is also a linear operator.} \\
+\textit{c) Consider the operator}
+\begin{align*}
+	\mathcal{L}[f] = f^{\prime\prime\prime}(x) + 2f^\prime(x) - f(x)
+\end{align*}
+\textit{Using your results from problem 7 and 8, write a simple proof to show that $\mathcal{L}$ is a linear operator.} \\ \\
+
+\newpage
+
+\textit{9. Consider the space of all polynomials written with real coefficients.} \\
+\textit{a) Show that, with suitable definitions of vector addition and scalar multiplication, this is a vector space.} 
+
+\begin{proof}
+Let $p_n(x) = a_0 + a_1x + \ldots a_{n-1}x^{n-1} + a_nx^n$ and $q_m(x) = b_0 + b_1x + \ldots + b_{m-1}x^{m-1} + b_mx^m$ be in the space of all polynomials $\mathbb{P}$. We can then define polynomial addition and multiplication as 
+\begin{align*}
+	& p_n(x) + q_m(x) = a_0 + a_1x + \ldots + a_{n-1}x^{n-1} + a_nx^n + b_0 + b_1x + \ldots + b_{m-1}x^{m-1} + b_mx^m \\
+	& kp_n(x) = ka_0 + ka_1x + \ldots + ka_{n-1}x^{n-1} + ka_nx^n, \quad k \in \mathbb{R}
+\end{align*}
+Let $k_1,k_2$ be in $\mathbb{R}$. Then we have 
+\begin{align*}
+	k_1p_n(x) & = k_1a_0 + k_1a_1x + \ldots + k_1a_{n-1}x^{n-1} + k_1a_nx^n \in \mathbb{P} \\ \\
+	k_1(p_n(x) + q_m(x)) & = k_1a_0 + k_1a_1x + \ldots + k_1a_{n-1}x^{n-1} + k_1a_nx^n \\
+	& + k_1b_0 + k_1b_1x + \ldots + k_1b_{m-1}x^{m-1} + k_1b_mx^m = k_1p_n(x) + k_1q_m(x) \\ \\	
+	(k_1 + k_2)p_n(x) & = (k_1 + k_2)a_0 + (k_1 + k_2)a_1x + \ldots + (k_1 + k_2)a_{n-1}x^{n-1} + (k_1 + k_2)a_nx^n
+\end{align*}
+\end{proof}
+
+\textit{b) Can you define an inner product on this space? Prove that it is an inner product.} \\
+\textit{c) Can you find a basis for this space? Is the basisi finite or infinite?} \\ \\
+
+\newpage
+
+\textit{10. Consider the vector space $V = \mathbb{R}^3$. Consider an arbitrary linear operator mapping $V$ to itself, $\mathcal{L}: V \rightarrow V$. Show that such a linear operator can be represented by matrix multiplication.}
+
+\end{document}
