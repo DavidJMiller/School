@@ -1,0 +1,243 @@
+\documentclass[12pt]{article}
+
+%-------------PACKAGES------------- 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{pgfplots}
+\usepackage{float}
+\usepackage{braket}
+\usepackage{titling}
+\usepackage{tikz}
+
+%-------------FORMATTING-------------
+\setlength{\droptitle}{-5em} 
+\setlength{\parindent}{0pt}
+ 
+%--------------COMMANDS--------------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+%\renewcommand{\qedsymbol}{\filledbox}
+
+%------------ENVIRONMENTS------------ 
+\newenvironment{theorem}[2][]{\begin{trivlist}
+\item[{\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Reflection]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%------------------------------------ 
+%---------START-OF-DOCUMENT----------
+%------------------------------------
+\begin{document}
+ 
+\title{Homework 2}
+\author{David Miller \\ 
+MAP 5165: Methods of Applied Mathematics I} 
+ 
+\maketitle
+
+\subsection*{Problem 1}
+
+\textit{Find the fixed points and classify them.}
+\begin{align}
+	\dot{x} = y - x^3 + x, \quad \dot{y} = -x - y^3 + y
+\end{align}
+
+The point (0,0) is an obvious fixed point. Now lets check for other fixed points:
+\begin{align*}
+	x = 0 = y - x^3 + x & \Rightarrow y = x^3 - x \\
+	y = 0 = -x - y^3 + y & \Rightarrow 0 -x - (x^3-x)^3 + x^3 - x \\
+	& \Rightarrow 0 = -1 - x^2(x+1)^3(x-1)^3 + (x+1)(x-1)
+\end{align*}
+From this we can see (from plugging into Wolfram$|$Alpha) that there are no other fixed points. Therefore letting $f = y - x^3 + x$ and $g = -x -y^3 + y$ we get 
+\begin{center}
+\begin{pmatrix} 
+f_x & f_y \\ 
+g_x & g_y 
+\end{pmatrix} =
+\begin{pmatrix}
+-3x^2 + 1 & 1 \\
+-1 & -3y^2 + 1
+\end{pmatrix}
+ \xrightarrow{\text{Plugging in }(0,0)}
+\begin{pmatrix}
+1 & 1 \\ -1 & 1
+\end{pmatrix}
+\xrightarrow{\text{Compute eigenvalue }\lambda}
+\begin{pmatrix}
+	1-\lambda & 1 \\ -1 & 1 - \lambda
+\end{pmatrix}
+\end{center}
+\vspace{0.25cm}
+
+From this we have that $(1-\lambda)^2 = -1$ and therefore $\lambda = 1\pm i$. Therefore the fixed point is an unstable spiral.
+
+\newpage
+
+\subsection*{Problem 2}
+
+\textit{A particle is confined on the half line $x \geq 0$ and moves according to the following equation of motion: $\dot{x} = -x^\alpha$ where $\alpha$ is a real constant.} \\ \\
+\textit{(a) Find all the values of $\alpha$ for which the origin $(x = 0)$ is a stable fixed point.} \\
+
+If we want the origin to be a stable fixed point then we need two conditions
+\begin{itemize}
+	\item If $x > 0$ then $\dot{x}$ must be less than zero to force it back to the origin,
+	\item If $x < 0$ then $\dot{x}$ must be greater than zero to force  it back to the origin.
+\end{itemize}
+When $x > 0$ we get that $\alpha$ can be any positive real number. If it is negative than the problem does ot admit a fixed point. When $x < 0$ we get that $\alpha$ must be some rational $\frac{p}{q}$ where $p$ is an odd integer. Putting this together we get that $\alpha$ can take on any positive number on the positive half-line. \\
+
+
+\textit{(b) Consider the values of $\alpha$ found in part (a). Can the particle ever reach the origin in finite time? Specifically, how long does it take for the particle to travel from $x = 1$ to $x = 0$ as a function of $\alpha$.} \\
+
+\begin{align*}
+	\frac{dx}{dt} & = -x^\alpha \\
+	-\int\frac{dx}{x^{\alpha}} & = \int dt \\
+	-\frac{x^{-\alpha+1}}{-\alpha+1} & = t + c\\
+\end{align*}
+
+for some $c \in \mathbb{R}$. The time it takes to get from $x=1$ to $x=0$ is
+$$ t_0 - t_1 = \frac{1}{1 - \alpha} $$
+Therefore we do have that the particle can reach the origin in finite time if we allow $\alpha \in (0,1)$.
+\newpage 
+
+\subsection*{Problem 3}
+
+\textit{Consider the equation}
+\begin{align}
+	& \dot{x} = cx + x^3
+\end{align}
+
+\textit{where $x(t) \in \R$ and $c > 0$ is real and fixed. Prove rigorously that $x(t) \rightarrow \pm\infty$ in finite time, starting from any initial condition $x_0 \neq 0$.} \\
+\begin{align*}
+\frac{dx}{dt} & = cx + x^3 \\
+\int \frac{dx}{x(c + x^2)} & = \int dt \\
+\int \frac{dx}{cx} - \int \frac{xdx}{c(c+x^2)} & = t + a \\
+\frac{ln(x)}{c} - \frac{ln(c+x^2)}{2c} & = t + a \\
+\frac{1}{c}ln\bigg(\frac{x}{c + x^2}\bigg) & = t + a
+\end{align*}
+for some $a \in \mathbb{R}$. We can not have that $x_0 = 0$ since we can not evaluate $ln(0)$. As $x \rightarrow \pm\infty$ we have that $ln(\frac{x}{c+x^2}) \rightarrow 0$. Therefore there is some finite $t^*$ such that $x(t^*) \rightarrow \pm\infty$.
+
+\newpage
+
+\subsection*{Problem 4}
+
+\textit{Find and classify all equilibrium points and sketch the local phase diagrams (find all phase paths whenever possible):} \\ \\
+\textit{(a) $\dot{x} = sin(y), \quad \dot{y} = -sin(x)$} \\ \\
+From the problem we have that  
+$$ sin(y) = 0 \text{ and} -sin(x) = 0 $$
+and therefore the fixed points are $(x,y) = (n\pi,m\pi)$ for $n,m \in \mathbb{Z}$. Setting $f = sin(y)$ and $g = -sin(x)$ we get \\
+\begin{center}
+\begin{pmatrix} 
+	f_x & f_y \\ 
+	g_x & g_y 
+\end{pmatrix} =
+\begin{pmatrix}
+	0 & cos(y) \\
+	cos(x) & 0
+\end{pmatrix}
+\xrightarrow{\text{Plugging in ($n\pi,m\pi$)}}
+\begin{pmatrix}
+	 0 & cos(m\pi) \\ cos(n\pi) & 0
+\end{pmatrix}
+\xrightarrow{\text{Compute }\lambda}
+\begin{pmatrix}
+	-\lambda & cos(m\pi) \\ cos(n\pi) & \lambda
+\end{pmatrix}
+\end{center} \\
+
+\vspace{0.25cm}
+Solving this we get $\lambda^2 - cos(n\pi)cos(m\pi) = 0$ where $cos(n\pi)cos(m\pi)$ is always 1 or -1. If $cos(n\pi)cos(m\pi)$ = 1 we have that $\lambda = \pm i$ and therefore we have center fixed point. If $cos(n\pi)cos(m\pi)$ = -1 then we have that $\lambda = \pm 1$. This is a saddle point and therefore can not be a stable fixed point. \\
+
+\newpage
+
+\textit{(b) $\dot{x} = 4 - 4x^2 - y^2, \quad \dot{y} = 3xy$} \\ \\
+From the problem we have that 
+$$ 3xy = 0 \, \Rightarrow \, x = y = 0 \, \Rightarrow \, 4 - 4x^2 = 0 \text{ and } 4 - y^2 = 0 \, \Rightarrow \, y = \pm 2, \, x = \pm 1$$
+So we have that the four fixed points are $(x,y) = (0,\pm2)$ and $(x,y) = (\pm1,0)$. Setting $f = 4 - 4x^2 - y^2$ and $g = 3xy$ we get
+
+\begin{center}
+	\begin{pmatrix} 
+		f_x & f_y \\ 
+		g_x & g_y 
+	\end{pmatrix} =
+	\begin{pmatrix}
+		-8x & -2y \\
+		3y & 3x
+	\end{pmatrix}
+	\xrightarrow{\text{Plugging in (0,$\pm 2$)}}
+	\begin{pmatrix}
+		0 & \mp4 \\ \pm6 & 0
+	\end{pmatrix}
+	\xrightarrow{\text{Compute eigenvalue }\lambda}
+	\begin{pmatrix}
+		-\lambda & \mp4 \\ \pm6 & -\lambda
+	\end{pmatrix}
+\end{center} \\
+\vspace{0.25cm}
+
+Solving this we get $\lambda^2 + 24$ = 0. Therefore we have that $\lambda = \pm i\sqrt{24}$ which is a center for the fixed point $(0,\pm2)$. Plugging in $(\pm1,0)$ yields $(8 \pm \lambda)(3 \pm \lambda)$ which evaluates to $\lambda = \sqrt{24}$. This implies that $(\pm1,0)$ is a saddle point and therefore not a stable fixed point.
+
+\newpage
+
+\subsection*{Problem 5}
+
+\textit{Prove that the ODE}
+\begin{align}
+	\dot{x} = 1 + x^{12}, \quad x(0) = 2
+\end{align}
+
+\textit{blows up in finite time.} \\
+
+We have that  
+$$  \dot{x}_1 = x^{12} \, \leq \, \dot{x} = 1 + x^{12}, \quad \forall x $$
+Therefore it is sufficient to show $\dot{x}_1$ blows up in finite time.
+\begin{align*}
+	\frac{dx_1}{dt} & = x_1^{12} \\
+	\int\frac{dx_1}{x_1^{12}} & = \int dt \\
+	-\frac{1}{11x_1^{11}} & = t + c \\
+	\Rightarrow c & = \frac{-2^{-11}}{11} \\
+	x_1 & = \frac{-1}{11}\frac{1}{t+c} 
+\end{align*}
+ Therefore we have that $\dot{x}_1$ blows up in finite time ($t = \frac{1}{11\star 2^{11}}$) and therefore $\dot{x}$ blows up in finite time. 
+
+\newpage
+
+\subsection*{Problem 6}
+
+\textit{Prove the following theorem:}
+\begin{theorem}{Theorem}
+	\textit{Suppose that $\Gamma$ lies in a simply connected domain in $\R^2$ and there are no fixed points in the area enclosed by $\Gamma$, then the index $I_{\Gamma}$ must be zero.} 
+\end{theorem}
+\begin{proof}
+Since $\Gamma$ is a closed non-intersecting curve in a simply connected region we can apply Green's Theorem which states
+$$ \oint_\Gamma (P dx + Q dy) = \iint_{D\Gamma} \bigg(\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\bigg)dxdy $$
+where $D_\Gamma$ is the interior region bounded by $\Gamma$. In class we were given the equation for calculating the index
+$$ I_\Gamma = \frac{1}{2\pi}\int\limits_{s_0}^s \frac{XY^\prime - YX^\prime}{X^2 + Y^2} \, ds $$
+Since we want to evaluate this in $\mathbb{R}^2$ to use Green's Theorem we use the chain rule
+$$ X^\prime = \frac{dX}{ds} = \frac{dx}{ds} + X_y\frac{dy}{ds}, \quad Y^\prime = \frac{dY}{ds} = Y_x\frac{dx}{ds} + Y_y\frac{dy}{ds} $$
+which then turns the index equation into
+\begin{align*}
+I_\Gamma & = \frac{1}{2\pi}\oint_\Gamma\bigg(\underbrace{\frac{XY_x - YX_x}{X^2 + Y^2}}_{P}\,dx + \underbrace{\frac{XY_y - YX_y}{X^2 + Y^2}}_{Q}\,dy\bigg).
+\end{align*}
+The functions $P$ and $Q$ satisfy Green's Theorem since the denominator of each does not equal zero. Therefore we have 
+$$ I_\Gamma = \frac{1}{2\pi}\iint_\Gamma\bigg[\bigg(\frac{\partial}{\partial x}\frac{XY_y - YX_y}{X^2 + Y^2}\bigg) - \frac{\partial}{\partial y}\bigg(\frac{XY_x - YX_x}{X^2 + Y^2}\bigg)\bigg] $$
+Evaluating the inside of the double integral we get
+\begin{align*}
+	& (X_xY_y - XY_{yx} - Y_xX_y - YX_{yx})(X^2 + Y^2) - (2XX_x + 2YY_x)(XY_y - YX_y) \\
+	- & (X_yY_x + XY_{xy} - Y_yX_x - YX_{xy})(X^2 + Y^2) + (2XX_y + 2YY_y)(XY_x - YX_x)
+\end{align*} 
+After some very tedious algebra this expression reduces to zero proving that the index of the curve is zero.
+\end{proof}
+
+\end{document}

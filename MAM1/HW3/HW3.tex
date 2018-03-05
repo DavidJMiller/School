@@ -1,0 +1,615 @@
+\documentclass[12pt]{article}
+
+%-------------PACKAGES------------- 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{pgfplots}
+\usepackage{float}
+\usepackage{braket}
+\usepackage{titling}
+\usepackage{tikz}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{algorithm,algpseudocode}
+
+%-------------FORMATTING-------------
+\setlength{\droptitle}{-6em} 
+\setlength{\parindent}{0pt}
+\pgfplotsset{compat=1.11}
+\usepgfplotslibrary{fillbetween}
+ 
+%--------------COMMANDS--------------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+%\renewcommand{\qedsymbol}{\filledbox}
+
+\DeclarePairedDelimiter \abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter \norm{\lVert}{\rVert}%
+
+%------------ENVIRONMENTS------------- 
+\newenvironment{theorem}[2][]{\begin{trivlist}
+\item[{\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Reflection]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%-------------CODE-STYLE------------
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+	language=C++,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\lstset{
+	morekeywords={end}
+}
+
+%------------------------------------ 
+%---------START-OF-DOCUMENT----------
+%------------------------------------
+
+\begin{document}
+ 
+\title{Homework 6}
+\author{David Miller \\ 
+MAP5345: Partial Differential Equations I} 
+ 
+\maketitle
+
+\section*{Problem 1}
+
+\textit{Analyze the following dynamical systems. In each case sketch the vector field on the real line, find all the fixed points and classify their stability.} \\ 
+
+\textit{(a) $\dot{x} = x - x^3$} \\
+
+Fixed Points: $x = 0, \pm1$ with $d\dot{x}/dx = 1 - 3x^2$.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	hide axis,
+	axis line style = thick,
+	ymin = 0,
+	ymax = 0,
+	xmin = -2,
+	xmax = 2,
+	axis lines = middle,
+	label style =
+	{at={(ticklabel cs:1.1)}}
+	]
+	\addplot [only marks] table {
+		-1 0
+		0 0 
+		1 0
+	};
+	\addplot [->, scale=10] plot coordinates {(0.25,0) (0.75,0)};
+	\addplot [->, scale=10] plot coordinates {(-0.25,0) (-0.75,0)};
+	\addplot [->, scale=10] plot coordinates {(-1.75,0) (-1.25,0)};
+	\addplot [->, scale=10] plot coordinates {(1.75,0) (1.25,0)};
+	\end{axis}	
+	\end{tikzpicture}
+\end{figure}
+
+Therefore we have that $x = \pm1$ is stale fixed point and $x=0$ is unstable fixed point. \\
+
+\textit{(b) $\dot{x} = 1 + cos(x)/2$} \\
+
+There are no fixed points since $\max(cos\,x)$ = 1. \\
+
+\textit{(c) $\dot{x} = 1 - x^{14}$} \\
+
+Fixed Points: $x = \pm1$ with $d\dot{x}/dx = -14x^{13}$
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	hide axis,
+	axis line style = thick,
+	ymin = 0,
+	ymax = 0,
+	xmin = -2,
+	xmax = 2,
+	axis lines = middle,
+	label style =
+	{at={(ticklabel cs:1.1)}}
+	]
+	\addplot [only marks] table {
+		1 0
+		-1 0
+	};
+	\addplot [<-, scale=10] plot coordinates {(0.75,0) (-0.75,0)};
+	\addplot [->, scale=10] plot coordinates {(1.75,0) (1.25,0)};
+	\addplot [<-, scale=10] plot coordinates {(-1.75,0) (-1.25,0)};
+	\end{axis}	
+	\end{tikzpicture}
+\end{figure}
+
+Therefore we have that $x = 1$ is a stable fixed point and $x = -1$ is an unstable fixed point.
+
+\newpage
+
+\section*{Problem 2}
+
+\textit{Discuss the bifurcation properties of the following dynamical systems} \\
+
+The main idea behind bifurcation theory is to determine how some parameter $a$ can affect the dynamical system $$ \dot{x} = f(x,a) $$
+given that we can mess around with the value of $a$. So what we do is set $\dot{x} = 0$ and derive the equations 
+$$ a = f(x), \quad \frac{d\dot{x}}{dx} = g(x) $$
+and plot them. Doing so yields bifurcation points and tells us which fixed points are stable and which are unstable. It is important to note that we care when $d\dot{x}/dx < 0$ because that tells us our dynamical system will go back to its fixed point. \\
+
+\textit{(a) $\dot{x} = a - x - e^{-x}$} \\
+
+From the graphs we can see that $(x,a) = (1,0)$ is a bifurcation point where the stable fixed points occur when $x > 0$ and the unstable fixed points occur when $x < 0$. Note how $d\dot{x}/dx$ is independent of $a$.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	ymin = -3,
+	ymax = 3,
+	xmin = -3,
+	xmax = 21,
+	axis lines = middle,
+	xlabel=$a$,
+	ylabel=$x$,
+	label style =
+	{at={(ticklabel cs:1.1)}}
+	]
+	\addplot [only marks] table {
+		1 0
+	};
+	\addplot [domain=0:3, samples=100, black, very thick] ({x + exp(-x)}, {x});
+	\addplot [domain=-3:0, samples=100, dashed, black, very thick] ({x + exp(-x)}, {x});
+	\legend{Bifurcation Point,Stable,Unstable}
+	\end{axis}	
+	\end{tikzpicture}
+	\begin{tikzpicture}
+		\begin{axis}[
+		ymin = -3,
+		ymax = 3,
+		xmin = -3,
+		xmax = 21,
+		axis lines = middle,
+		ylabel=$d\dot{x}/dx$,
+		xlabel=$x$,
+		label style =
+		{at={(ticklabel cs:1.1)}}
+		]
+		\addplot [domain=-3:20, samples=100, blue, very thick] ({-1 + exp(-x)}, {x});
+		\legend{$d\dot{x}/dx$}
+		\end{axis}	
+	\end{tikzpicture}
+	\caption{Plot of $a = x + e^{-x}$ for $x \in [-3,3]$ (left) and $f^\prime(x) = -1 + e^{-x}$}
+\end{figure}
+
+\newpage
+
+\textit{(b) $\dot{x} = rlnx + x -1$} \\
+
+We can see that Also $\dot{x} = 0$ when $x = 1$ regardless of the value $r$. Also, the function $d\dot{x}/dx = r/x + 1$ is negative in the area of interest when $x < r$. Therefore we know that fixed points above the line $x = r$ will be unstable fixed points.
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	axis line style = thick,
+	ymin = 0,
+	ymax = 3,
+	xmin = -2,
+	xmax = 0.5,
+	axis lines = middle,
+	xlabel=$r$,
+	ylabel=$x$,
+	label style =
+	{at={(ticklabel cs:1.1)}}
+	]
+	\addplot [only marks] table {
+		-1 1
+	};
+	\addplot [domain=0:1.01, samples=200, black, very thick] ( {(1-x)/ln(x)}, {x});
+	\addplot [domain=1.05:3, samples=100, dashed, black, very thick] ( {(1-x)/ln(x)}, {x});
+	\addplot [domain=-2:-1, samples=50, black, very thick] ({x}, {1});
+	\addplot [domain=-1:0.5, samples=50, dashed, black, very thick] ({x}, {1});
+	\addplot [domain=-2:0.5, samples=50, red, very thick] ({x}, {-x});
+	\legend{Bifurcation Point, Stable Fixed Points, Unstable Fixed Points,,, $x = r$}
+	\end{axis}	
+	\end{tikzpicture}
+	\caption{Plot of $r = \frac{1-x}{ln(x)}$ for $x \in [0,3]$}
+	\end{figure}
+
+\textit{(c) $\dot{x} = -x + rtanh x$} \\
+
+We can see that $\dot{x}=0$ when $x = 0$ regardless of the value of $r$. Also, the function $d\dot{x}/dx = -1 + r(1 - tanh^2(x))$ is negative in the area of interest when $x=0$ and $r > 1$.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	ymin = -1.5,
+	ymax = 1.5,
+	xmin = 0,
+	xmax = 2,
+	axis lines = middle,
+	xlabel=$r$,
+	ylabel=$x$,
+	label style =
+	{at={(ticklabel cs:1.1)}},
+	legend style={at={(0.03,0.9)},anchor=west}
+	]
+	\addplot [only marks] table {
+		1 0
+	};
+	\addplot [domain=0.01:1.5, samples=50, black, very thick] ({x/tanh(x)},{x});
+	\addplot [domain=-1.5:-0.01, samples=50, black, very thick] ({x/tanh(x)},{x});
+	\addplot [domain=0:1, samples=25, black, very thick] ({x},{0});
+	\addplot [domain=1:2, samples=25, dashed, black, very thick] ({x},{0});
+	\legend{Birfurcation Point, Stable Fixed Points,,,Unstable Fixed Points}
+	\end{axis}	
+	\end{tikzpicture}
+	\caption{Plot of $r = \frac{x}{tanh(x)}$ for $x \in [-1.5,1.5]$}
+\end{figure}
+
+\newpage
+
+\textit{(d) $\dot{x} = rx + x^3 - x^5$} \\
+
+We can easily see that the fixed points are $(r,x) = (0,0)$ and $(0,\pm1)$. Some number crunching tells us that for $x \in (-1,1)$ the fixed points are unstable since $d\dot{x}/dx > 0$.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	ymin = -2,
+	ymax = 2,
+	xmin = -.5,
+	xmax = 5,
+	axis lines = middle,
+	xlabel=$r$,
+	ylabel=$x$,
+	label style =
+	{at={(ticklabel cs:1.1)}},
+	legend style={at={(0.9,0.65)}}
+	]
+	\addplot [only marks] table {
+		0 1
+		0 0
+		0 -1
+	};
+	\addplot [domain=-3:-1, samples=100, black, very thick] ({(x*x*x*x*x - x*x*x)/x}, {x});
+	\addplot [domain=1:3, samples=100, black, very thick] ({(x*x*x*x*x - x*x*x)/x}, {x});
+	\addplot [domain=-1:1, samples=100, dashed, black, very thick] ({(x*x*x*x*x - x*x*x)/x}, {x});
+	\legend{Bifurcation Points,Stable Fixed Points,,Unstable Fixed Points}
+	\end{axis}	
+	\end{tikzpicture}
+	\caption{Plot of $r = \frac{x^5-x^3}{x}$ for $x \in [-3,3]$}
+\end{figure}
+
+\textit{(e) $\dot{x} = 1 + rx + x^2$} \\
+
+From the function $d\dot{x}/dx = 2x + r$, we can see that it is negative when only one of them is negative and $|r| > |x|/2$. From the graphs we can then see that $(r,x) = (-2,1)$ is a bifurcation point with stable fixed points such that $x < 1$ and $(r,x) = (2,-1)$ is a bifurcation point with stable fixed points such that $x < -1$. 
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	ymin = -2,
+	ymax = 2,
+	xmin = -5,
+	xmax = 5,
+	axis lines = middle,
+	xlabel=$r$,
+	ylabel=$x$,
+	label style =
+	{at={(ticklabel cs:1.1)}},
+	legend style={at={(0.6,0.85)}, anchor = west}
+	]
+	\addplot [only marks] table {
+		2 -1
+		-2 1
+	};
+	\addplot [domain=0.01:1, samples=100, black, very thick] ({(x*x + 1)/(-x)}, {x});
+	\addplot [domain=1:3, samples=100, dashed, black, very thick] ({(x*x + 1)/(-x)}, {x});
+	\addplot [domain=-1:-0.01, samples=100, black, very thick] ({(x*x + 1)/(-x)}, {x});
+	\addplot [domain=-3:-1, dashed, samples=100, black, very thick] ({(x*x + 1)/(-x)}, {x});
+	\addplot [domain=-4:4, samples=100, red, very thick] ({x}, {-0.5*x});
+	\legend{Bifurcation Points,Stable Fixed Points,Unstable Fixed Points. $x = r/2$}
+	\end{axis}	
+	\end{tikzpicture}
+	\caption{Plot of $r = \frac{-x^2-1}{x}$ for $x \in [-3,3]$}
+\end{figure}
+
+\newpage
+
+\textit{(f) $\dot{x} = r - cosh x$} \\
+
+It is easy to check that $(r,x) = (1,1)$ is a fixed point for this system. Graphing $d\dot{x}/dx$ we see that for all values $r > 1$ the system has stable fixed points regardless of the value of $x$.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	ymin = -2,
+	ymax = 2,
+	xmin = 0,
+	xmax = 3,
+	axis lines = middle,
+	xlabel=$r$,
+	ylabel=$x$,
+	label style =
+	{at={(ticklabel cs:1.1)}},
+	legend style={at={(0.75,0.925)}, anchor = east}
+	]
+	\addplot [only marks] table {
+		1 0
+	};
+	\addplot [domain=-3:3, samples=500, black, very thick] ({cosh(x)}, {x});
+	\legend{Bifurcation Point, Stable Fixed Points}
+	\end{axis}	
+	\end{tikzpicture}
+	\begin{tikzpicture}
+			\begin{axis}[
+			ymin = -2,
+			ymax = 2,
+			xmin = -5,
+			xmax = 5,
+			axis lines = middle,
+			xlabel=$x$,
+			ylabel=$d\dot{x}/dx$,
+			label style =
+			{at={(ticklabel cs:1.1)}},
+			legend style={at={(0.6,0.85)}, anchor = west}
+			]
+			\addplot [only marks] table {
+			};
+			\addplot [domain=-3:3, samples=100, blue, very thick] ({x}, {-sinh(x)});
+			\legend{$d\dot{x}/dx$}
+			\end{axis}	
+	\end{tikzpicture}
+	\caption{Plot of $r = cosh(x)$ for $x \in [-3,3]$}
+\end{figure}
+
+\textit{(g) $\dot{x} = x - rx(1-x)$} \\
+
+We can see that $(r,x) = (r,0)$ are fixed points, but $d\dot{x}/dx = 1 + r(2x-1)$ sets $(1,0)$ to the bifurcation point. In fact, $d\dot{x}/dx$ is only negative when $x > 1$ and $r > 1$. From this we get our bifurcation map.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	ymin = -4,
+	ymax = 4,
+	xmin = -3,
+	xmax = 3,
+	axis lines = middle,
+	xlabel=$r$,
+	ylabel=$x$,
+	label style =
+	{at={(ticklabel cs:1.1)}},
+	legend style={at={(0.6,0.925)}, anchor = west}
+	]
+	\addplot [only marks] table {
+		1 0
+	};
+	\addplot [domain=-4:-0.01, samples=300, black, very thick] ({x/(x - x*x)}, {x});
+	\addplot [domain=0.01:0.99, samples=300, dashed, black, very thick] ({x/(x - x*x)}, {x});
+	\addplot [domain=1.01:4, samples=300, black, very thick] ({x/(x - x*x)}, {x});
+	\legend{Bifurcation Point, Stable Fixed Points, Unstable Fixed Points}
+	\end{axis}	
+	\end{tikzpicture}
+	\caption{Plot of $r = \frac{x}{x(1-x)}$ for $x \in [-4,4]$}
+\end{figure}
+
+\newpage
+
+\textit{(h) $\dot{x} = x(r - e^x)$} \\
+
+It is easy to see that $(r,x) = (1,0)$ and $(r,0)$ are the fixed points. The function $e^x$ grows faster than $r$ for $x>1$, therefore fixed points will become stable for $x > 1$ for the first fixed point. For the second fixed point, if we perturb $x$ just a little we see that $d\dot{x}/dx > 0$ and thus becomes unstable on the axis.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	ymin = -4,
+	ymax = 1,
+	xmin = -0.5,
+	xmax = 3,
+	axis lines = middle,
+	xlabel=$r$,
+	ylabel=$x$,
+	label style =
+	{at={(ticklabel cs:1.1)}},
+	legend style={at={(0.75,0.4)}, anchor = north}
+	]
+	\addplot [only marks] table {
+		1 0
+	};
+	\addplot [domain=0:1, samples=50, black, very thick] ({exp(x)}, {x});
+	\addplot [domain=-4:0, dashed, samples=100, black, very thick] ({exp(x)}, {x});
+	\addplot [domain=0:1, samples=50, black, very thick] ({x}, {0});
+	\addplot [domain=1:3, samples=50, dashed, black, very thick] ({x}, {0});
+	\legend{Bifurcation Point, Stable Fixed Points, Unstable Fixed Points}
+	\end{axis}	
+	\end{tikzpicture}
+	\caption{Plot of $r = e^x$ for $x \in [-4,1]$}
+\end{figure}
+
+\textit{(i) $\dot{x} = rx - 4ax^3, \quad a = \pm 1$} \\
+
+The only fixed point for $a=1$ is $(r,x) = (0,0)$. The only time when $d\dot{x}/dx > 0$ is when $x=0$ and $r>0$, otherwise it is always negative. Since $\dot{x}$ is an odd function, flip it across the y-axis and we have the solution for when $a=-1$. Both are pitchfork bifurcations at $(0,0)$ where the only unstable fixed points is $(r,x) = (r,0)$ ($r>0$ when $a=1$ and $r<0$ when $a=-1$).
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	ymin = -1,
+	ymax = 1,
+	xmin = -2,
+	xmax = 2,
+	axis lines = middle,
+	xlabel=$r$,
+	ylabel=$x$,
+	label style =
+	{at={(ticklabel cs:1.1)}},
+	legend style={at={(0.5,0.85)}, anchor = south}
+	]
+	\addplot [only marks] table {
+		0 0
+	};
+	\addplot [domain=-2:0, samples=100, black, very thick] ({x}, {0});
+	\addplot [domain=-1:1, samples=100, black, very thick] ({4*x*x}, {x});
+	\addplot [domain=0:2, dashed, samples=50, black, very thick] ({x}, {0});
+	\legend{Birfurcation Point, Stable Fixed Points, Unstable Fixed Points}
+	\end{axis}	
+	\end{tikzpicture}
+		\begin{tikzpicture}
+		\begin{axis}[
+		ymin = -1,
+		ymax = 1,
+		xmin = -2,
+		xmax = 2,
+		axis lines = middle,
+		xlabel=$r$,
+		ylabel=$x$,
+		label style =
+		{at={(ticklabel cs:1.1)}},
+		legend style={at={(0.5,0.85)}, anchor = south}
+		]
+		\addplot [only marks] table {
+			0 0
+		};
+		\addplot [domain=0:2, samples=100, red, very thick] ({x}, {0});
+		\addplot [domain=-1:1, samples=100, red, very thick] ({-4*x*x}, {x});
+		\addplot [domain=-2:0, dashed, samples=50, red, very thick] ({x}, {0});
+		\legend{Birfurcation Point, Stable Fixed Points, Unstable Fixed Points}
+		\end{axis}	
+		\end{tikzpicture}
+	\caption{Plot of $r = 4x^2$ (black) and $r = -4x^2$ (red) for $x \in [-1,1]$}
+\end{figure}
+
+\textit{(j) $\dot{x} = x + \frac{rx}{1+x^2}$} \\
+
+The fixed points of the dynamical system is when $x = 0$. The function $d\dot{x}/dx = 1 + r(1-x^2)/(1+x^2)^2$ is zero when $r=-1$; this is the bifurcation point. We set $d\dot{x}/dx < 0$ and get $r < (x^2-1)/(1+x^2)^2$. This is plotted in red so any fixed points to the left of the graph will be stable. 
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	ymin = -1.5,
+	ymax = 1.5,
+	xmin = -3,
+	xmax = 0.5,
+	axis lines = middle,
+	xlabel=$r$,
+	ylabel=$x$,
+	label style =
+	{at={(ticklabel cs:1.1)}},
+	legend style={at={(1,0.85)}, anchor = west}
+	]
+	\addplot [only marks] table {
+		-1 0
+	};
+	\addplot [domain=-4:4, samples=100, black, very thick] ({-(1 + x*x)}, {x});
+	\addplot [domain=-1:0.5, samples=50, dashed, black, very thick] ({x}, {0});
+	\addplot [domain=1.01:4, samples=100, black, very thick] ({exp(x)}, {x});
+	\addplot [domain=-3:-1, samples=50, black, very thick] ({x}, {0});
+	\addplot [domain=-2:2, samples=50, red, very thick] ({(x*x-1)/((1+x*x)*(1+x*x))}, {x});
+	\legend{Bifurcation Point, Stable Fixed Points, Unstable Fixed Points,,, $d\dot{x}/dx=0$}
+	\end{axis}	
+	\end{tikzpicture}
+	\caption{Plot of $r = -(1 + x^2)$ for $x \in [-1.5,1.5]$}
+\end{figure}
+
+\section*{Problem 3}
+
+\textit{Use linear stability analysis to classify the fixed points of the following systems. If linear stability analysis fails because $f^\prime(x) = 0$, use a graphical argument to determine the stability.} \\
+
+\textit{(a) $\dot{x} = x(1-x)$} \\
+
+Fixed Points: $x = 0,1$. We have that $d\dot{x}/dx = 1-2x$ and from this we can conclude that $x=0$ is an unstable fixed point while $x=1$ is a stable fixed point. \\
+
+\textit{(b) $\dot{x} = x^2(6-x)$} \\
+
+Fixed Points: $x = 0,6$. We have that $d\dot{x}/dx = 12x - 3x^2$ and from this we can conclude that $x=6$ is a stable fixed point; w need to further investigate $x=0$.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	ymin = -1,
+	ymax = 1,
+	xmin = -0.5,
+	xmax = 0.5,
+	axis lines = middle,
+	xlabel=$x$,
+	ylabel=$d\dot{x}/dx$,
+	label style =
+	{at={(ticklabel cs:1.1)}},
+	legend style={at={(1,0.85)}, anchor = west}
+	]
+	\addplot [domain=-0.5:0.5, samples=100, black, very thick] ({x}, {12*x - 3*x*x});
+	\end{axis}	
+	\end{tikzpicture}
+\end{figure}
+
+From the graph we can see that a small perturbation around $x=0$ in the negative direction is stable while a small perturbation in the positive direction is unstable. \\
+
+\textit{(c) $\dot{x} = 1 - e^{-x^2}$} \\
+
+Fixed Points: $x=0$. We have that $d\dot{x}/dx = -2xe^{x^2}$ however we can not conclude anything from this, so we must investigate further. 
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	ymin = -1,
+	ymax = 1,
+	xmin = -0.5,
+	xmax = 0.5,
+	axis lines = middle,
+	xlabel=$x$,
+	ylabel=$d\dot{x}/dx$,
+	label style =
+	{at={(ticklabel cs:1.1)}},
+	legend style={at={(1,0.85)}, anchor = west}
+	]
+	\addplot [domain=-4:4, samples=100, black, very thick] ({x}, {2*x*exp(-x*x)});
+	\end{axis}	
+	\end{tikzpicture}
+\end{figure}
+
+From the graph we can see that a small perturbation around $x=0$ in the negative direction is stable while a small perturbation in the positive direction is unstable. It is the same case as before. \\
+
+\textit{(d) $\dot{x} = ax - x^3$} \\
+
+Fixed Points: $x = 0, \pm \sqrt{a}$. We have that $d\dot{x}/dx = a - 3x^2$ and from this we have that $x = \pm\sqrt{a}$ are fixed points. A bit more work must be done. When $a>0$ we have that $d\dot{x}/dx$ at $x=0$ is positive, so $x=0$ is linearly unstable. We also have that $d\dot{x}/dx$ is negative for $\pm\sqrt{a}$, so $x=\pm\sqrt{a}$ are linearly stable. If $a < 0$, there is no solution to the dynamical system, so we are done.
+
+\end{document}

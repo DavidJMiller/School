@@ -1,0 +1,472 @@
+\documentclass[12pt]{article}
+
+%-------------PACKAGES------------- 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{pgfplots}
+\usepackage{float}
+\usepackage{braket}
+\usepackage{titling}
+\usepackage{tikz}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{empheq}
+\usepackage{subcaption}
+\usepackage{algorithm,algpseudocode}
+
+%-------------FORMATTING-------------
+\setlength{\droptitle}{-6em} 
+\setlength{\parindent}{0pt}
+\pgfplotsset{compat=1.11}
+\usepgfplotslibrary{fillbetween}
+ 
+%--------------COMMANDS--------------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\dd}{^{\prime\prime}}
+\newcommand*\widefbox[1]{\fbox{\hspace{2em}#1\hspace{2em}}}
+%\renewcommand{\qedsymbol}{\filledbox}
+
+\DeclarePairedDelimiter \abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter \norm{\lVert}{\rVert}%
+
+%------------ENVIRONMENTS------------- 
+\newenvironment{theorem}[2][]{\begin{trivlist}
+\item[{\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Reflection]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%-------------CODE-STYLE------------
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+	language=C++,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\lstset{
+	morekeywords={end}
+}
+
+%------------------------------------ 
+%---------START-OF-DOCUMENT----------
+%------------------------------------
+
+\begin{document}
+ 
+\title{Homework 4}
+\author{David Miller \\ 
+MAP5165: Methods in Applied Mathematics I} 
+ 
+\maketitle
+
+\section*{Problem 1}
+\textit{Find an approximation solution for the IVP (here $0 < \epsilon << 1$):}
+$$ \frac{dy}{dt} + \epsilon y^2 - y = 0 $$
+\textit{subject to the initial condition $y(0) = 1$.} \\ 
+
+If we let $y(t,\epsilon)$ be the solution to the problem we get that 
+\begin{align*}
+	y(t, \epsilon) \approx y(t,0) + \epsilon\frac{\partial y(t,0)}{\partial\epsilon} + \epsilon^2\frac{\partial^2 y(t,0)}{\partial\epsilon^2} + \mathcal{O}(\epsilon^3)
+\end{align*}
+for some perturbation $\epsilon$. Now we take the partial with respect to the perturbation $\epsilon$ of the original problem to get
+\begin{align*}
+	\frac{\partial}{\partial\epsilon}\bigg(\frac{\partial}{\partial t}y + \epsilon y^2 - y\bigg) = 0, \quad \frac{\partial y(0, \epsilon)}{\partial \epsilon} = 1,
+\end{align*}
+which can be rewritten as 
+\begin{align*}
+	\frac{\partial}{\partial t}\frac{\partial y(t, \epsilon)}{\partial\epsilon} = \frac{\partial y(t, \epsilon)}{\partial\epsilon} - y^2 - 2\epsilon y\frac{\partial y(t,\epsilon)}{\partial\epsilon}.
+\end{align*}
+The unperturbed solution to this is $y(t,0) = e^t$. Now if we define $Y = \partial y(t,0)/\partial\epsilon$ we get the following differential equation
+\begin{align*}
+	\frac{dY}{dt} = Y - e^{2t}, \quad Y(0) = 0
+\end{align*}
+where the general solution to this is $Ae^t - e^{2t}$. Using the initial condition sets $A = 1$, and therefore the solution is 
+\begin{align*}
+	Y = e^t - e^{2t}, \quad y \approx e^t + \epsilon(e^t - e^{2t}). 	
+\end{align*}
+
+\newpage
+
+\section*{Problem 2}
+I used an online source for guidance with this problem. \\
+Reference: https://www.iist.ac.in/sites/default/files/people/multiplescale.pdf \\
+
+\textit{Find an approximate solution for the IVP (here $0 < \epsilon << 1$):}
+$$ \frac{d^2y}{dt^2} + \epsilon\frac{dy}{dt} + y = 0 $$
+\textit{subject to the initial condition $y(0) = 0$ and $\frac{dy}{dt}(0) = 1$.} \\
+
+To apply the method of multiple scales with introduce the variables
+\begin{align*}
+	T_0 = t, \quad T_1 = \epsilon t, \quad T_2 = \epsilon^2 t
+\end{align*}
+where they each represent different time scales due to the dampening effecting the amplitude and phase shift of the oscillator. Using the chain rule we get
+\begin{align*}
+	\frac{d}{dt} & = \frac{\partial}{\partial T_0}\frac{\partial T_0}{\partial t} + \frac{\partial}{\partial T_1}\frac{\partial T_1}{\partial t} + \frac{\partial}{\partial T_2}\frac{\partial T_2}{\partial t} + \mathcal{O}(\epsilon^3)\\
+	& = \frac{\partial}{\partial T_0} + \epsilon\frac{\partial}{\partial T_1} + \epsilon^2\frac{\partial}{\partial T_2} \\
+	\frac{d^2}{dt^2} & = \frac{\partial^2}{\partial T_0^2} + 2\epsilon\frac{\partial^2}{\partial T_0 \partial T_1} + \epsilon^2\bigg(\frac{\partial^2}{\partial T_0 \partial T_2} + \frac{\partial^2}{\partial T_1^2}\bigg) + \mathcal{O}(\epsilon^3)
+\end{align*}
+and thus the perturbed problem becomes
+\begin{align*}
+	\frac{\partial^2y}{\partial T_0^2} + 2\epsilon\frac{\partial^2y}{\partial T_0 \partial T_1} + \epsilon^2\bigg(\frac{\partial^2y}{\partial T_0 \partial T_2} + \frac{\partial^2y}{\partial T_1^2}\bigg) + \epsilon\bigg(\frac{\partial y}{\partial T_0} + \epsilon\frac{\partial y}{\partial T_1} + \epsilon^2\frac{\partial y}{\partial T_2}\bigg) + y = 0
+\end{align*}
+where we omit terms of $\mathcal{O}(\epsilon^3)$. To get an asymptotic approximation for $y$ in the form
+\begin{align*}
+	\tilde{y}(t) = y_0 + \epsilon y_1 + \epsilon^2y_2 \approx y(t)
+\end{align*}
+we plug $\tilde{y}(t)$ back into the perturbed equation and get 
+\begin{align*}
+	\frac{\partial^2y_0}{\partial T_0^2} + \epsilon\frac{\partial^2y_1}{\partial T_0^2} + \epsilon^2\frac{\partial^2y_2}{\partial T_0^2} + & 2\epsilon\frac{\partial^2y_0}{\partial T_0\partial T_1} + 2\epsilon^2\frac{\partial^2y_0}{\partial T_0 \partial T_2} + 2\epsilon^2\frac{\partial^2y_1}{\partial T_0 \partial T_1} + \epsilon^2\frac{\partial y_0}{\partial T_1^2} + \\ & 2\epsilon\bigg(\frac{\partial y_0}{\partial T_0} + \epsilon \frac{\partial y_0}{\partial T_1} + \epsilon\frac{\partial y_1}{\partial T_0}\bigg) + y_0 + \epsilon y_1 + \epsilon^2y_2 = 0
+\end{align*}
+where we omit terms of $\mathcal{O}(\epsilon^3)$. For the sake of brevity only first-order approximation will be done, but second order is done in a similar fashion. Gathering terms we get
+\begin{align*}
+	\mathcal{O}(1): \, & \frac{\partial^2y_0}{\partial T_0^2} + y_0 = 0 \\
+	\mathcal{O}(\epsilon) : \, & \frac{\partial^2y_1}{\partial T_0^2} + y_1 + 2\frac{\partial^2y_0}{\partial T_0\partial T_1} + 2\frac{\partial y_0}{\partial T_0} = 0
+\end{align*} 
+The initial conditions are $y_0 = 1 \Rightarrow \frac{\partial y_0}{\partial T_0} = 0$ and $y_1 = 0 \Rightarrow \frac{\partial y_1}{\partial T_0} = - \frac{\partial y_0}{\partial T_1}$ for $T_0 = T_1 = 0$. The general solution and its derivatives becomes 
+\begin{align*}
+	y_0 & = A(T_1)cos(T_0) + B(T_0)sin(T_0) \\
+	\frac{\partial y_0}{\partial T_0} & = -A(T_1)sin(T_0) + B(T_0)cos(T_0) \\
+	\frac{\partial^2}{\partial T_0 \partial T_1} & = -sin(T_0)\frac{\partial A}{\partial T_1} + cos(T_0)\frac{\partial B}{\partial T_1}
+\end{align*}
+Plugging this back in yields
+\begin{align*}
+	\frac{\partial^2y_1}{\partial T_0^2} + y_1 = 2\bigg(\frac{\partial A}{\partial T_1} + A\bigg)sin(T_0) - s\bigg(\frac{\partial B}{\partial T_1} + B\bigg)cos(T_0)
+\end{align*}
+The coefficients of $cos(T_0)$ and $sin(T_0)$ must vanish so we end up getting 
+\begin{align*}
+	\frac{\partial A}{\partial T_1} + A = 0, \quad \frac{\partial B}{\partial T_1} + B = 0 \quad \Rightarrow \quad A = ae^{-T_1}, \quad B = be^{-T_1}
+\end{align*}
+Substituting this back in we get 
+\begin{align*}
+	y_0 = ae^{-T_1}cos(T_0) + be^{-T_1}sin(T_0)
+\end{align*}
+where, from initial conditions, we get $a = 1$ and $b = 0$. Therefore we obtain the perturbed solution 
+\begin{align*}
+	x = e^{-T_1}cos(T_0) + \mathcal{O}(\epsilon) \quad \rightarrow \quad x = e^{-\epsilon t}cos(t) + \mathcal{O}(\epsilon)	
+\end{align*}
+which us valid for time of order $1/\epsilon$. 
+
+\newpage
+
+\section*{Problem 3}
+
+\textbf{NOTE: For the sake of brevity, some algebra is omitted in the writeup of Problem 3.} \\ 
+
+\textit{Find an approximate formula for each root of the following algebraic equations (here $0 < \epsilon << 1$):} \\
+
+\textit{(a) $xe^{-x} = \epsilon$} \\ 
+
+For the regularly perturbed root  $x = 0$ we let 
+\begin{align*}
+	x \approx x_0 + \epsilon x_1 + \epsilon^2 x_2
+\end{align*}
+Plugging back into the original system we get
+\begin{align*}
+	(x_0 + \epsilon x_1 + \epsilon^2 x_2) - \epsilon(1 + x_0 + \epsilon x_1 + \epsilon^2 x_2)
+\end{align*}
+where we used the Taylor series expansion for $e^x$. Collecting terms we get
+\begin{align*}
+	\mathcal{O}(1): & \, x-0 = 0 \\
+	\mathcal{O}(\epsilon): & \, x_1 - 1 = 0 \Rightarrow x_1 = 1 \\
+	\mathcal{O}(\epsilon^2): & \, x_2 - x_1 = 0 \Rightarrow x_2 = 1
+\end{align*}
+where we get 
+\begin{align*}
+	x = \epsilon + \epsilon^2
+\end{align*}
+for the root $x = 0$. Now considering the other perturbed roots, we take the log of both sides to get 
+\begin{align*}
+	x = log(x) + log(\frac{1}{\epsilon})
+\end{align*}
+where $x$ is the perturbed root. We can treat the perturbed root as a fixed point and apply fixed point iteration to determine $x$
+\begin{align*}
+	x_1 & = log(\frac{1}{\epsilon}) \\
+	x_2 & = log(\frac{1}{\epsilon}) + log(log(\frac{1}{\epsilon})) \\
+	x_3 & = log(\frac{1}{\epsilon}) + log(log(\frac{1}{\epsilon}) + log(log(\frac{1}{\epsilon}))) \\
+	& = log(\frac{1}{\epsilon}) + log(log(\frac{1}{\epsilon})) + \frac{log(log(\frac{1}{\epsilon}))}{log(\frac{1}{\epsilon})} + \mathcal{O}\bigg(\bigg(\frac{log(log(\frac{1}{\epsilon}))}{log(\frac{1}{\epsilon})}\bigg)^2\bigg)
+\end{align*}
+As $\epsilon \rightarrow 0$ we get that the expression converges. 
+
+\newpage
+
+\textit{(b) $x^3 - x + \epsilon = 0$} \\
+
+Unperturbed Roots: $x^3 - x = 0 \Rightarrow x = 0, \pm 1$ \\
+Taylor Expanding these roots we get
+\begin{align*}
+ & x_{+1} = 1 + \epsilon x_1 + \epsilon^2 x_2 + \mathcal{O}(\epsilon^3) \\
+ & x_{-1} = -1 + \epsilon x_1 + \epsilon^2 x_2 + \mathcal{O}(\epsilon^3) \\ 
+ & x_{0} = \epsilon x_1 + \epsilon^2 x_2 + \mathcal{O}(\epsilon^3)  
+\end{align*}
+
+Plugging back into the perturbed problem we get the following  
+\begin{align*}
+	x_{+1}^3 - x_{+1} - \epsilon & = (1 + \epsilon x_1 + \epsilon^2 x_2 + \mathcal{O}(\epsilon^3))^3 - (1 + \epsilon x_1 + \epsilon^2 x_2 + \mathcal{O}(\epsilon^3)) + \epsilon \\
+	& = (1 + 3\epsilon x_1 + \epsilon^2(3x_1^2 + 3x_2 + \mathcal{O}(\epsilon^3))) - (1 + \epsilon x_1 + \epsilon^2x_2 + \mathcal{O}(\epsilon^3)) + \epsilon \\
+	\mathcal{O}(1): & \, 1- 1 = 0 \\
+	\mathcal{O}(\epsilon): & \, 3x_1 - x_1 + 1 = 0 \Rightarrow x_1 = -\frac{1}{2} \\
+	\mathcal{O}(\epsilon^2): & \, 3x_1^2 + 3x_2 - x_2 = 0 \Rightarrow x_2 = -\frac{3}{8} \\ \\
+	x_{-1}^3 - x_{-1} - \epsilon & = (-1 + \epsilon x_1 + \epsilon^2 x_2 + \mathcal{O}(\epsilon^3))^3 - (-1 + \epsilon x_1 + \epsilon^2 x_2 + \mathcal{O}(\epsilon^3))  + \epsilon \\
+	& = (-1 + 3\epsilon x_1 + \epsilon^2(3x_2 - 3x_1^2 + \mathcal{O}(\epsilon^3))) - (-1 + \epsilon x_1 + \epsilon x_2 + \mathcal{O}(\epsilon^3)) + \epsilon \\
+	\mathcal{O}(1): & -1 + 1 = 0 \\
+	\mathcal{O}(\epsilon): & \, 3x_1 - x_1 + 1 = 0 \Rightarrow x_1 = -\frac{1}{2} \\
+	\mathcal{O}(\epsilon^2): & \, -3x_1^2 + 3x_2 - x_2 = 0 \Rightarrow x_2 = \frac{3}{8} \\ \\
+	x_{0}^3 - x_{0} - \epsilon & = (\epsilon x_1 + \epsilon^2 x_2 + \mathcal{O}(\epsilon^3))^3 - (\epsilon x_1 + \epsilon^2 x_2 + \mathcal{O}(\epsilon^3)) + \epsilon \\
+	& = \mathcal{O}(\epsilon^3) - (\epsilon x_1 + \epsilon^2 x_2 + \mathcal{O}(\epsilon^3)) + \epsilon \\
+	\mathcal{O}(1): & \, \text{ none} \\
+	\mathcal{O}(\epsilon): \,& -x_1 + 1 = 0 \Rightarrow x_1 = 1 \\
+	\mathcal{O}(\epsilon^2): &\, x_2 = 0
+\end{align*}
+Putting all this together we get the approximation root formulas
+\begin{align*}
+	x_{+1} & = 1 - \frac{\epsilon}{2} - \frac{3\epsilon^2}{8} \nonumber \\
+	x_{-1} & = -1 - \frac{\epsilon}{2} + \frac{3\epsilon^2}{8} \nonumber \\
+	x_0 & = \epsilon \nonumber 
+\end{align*}
+
+\newpage
+
+\textit{(c) $\epsilon x^3 - x + 1= 0$} \\ 
+
+We have a singularly perturbed system so we will apply scaling by letting $x = \delta y$ to get $\epsilon\delta^3y^3 - \delta y + 1 = 0$. Now we must balance
+\begin{align*}
+	& \text{Balance I and II}: \, \epsilon\delta^3 \sim \delta \Rightarrow \delta \sim \frac{1}{\sqrt{\epsilon}} \\	
+	& \text{Balance I and III}: \, \epsilon\delta^3 \sim 1 \Rightarrow \delta \sim \frac{1}{\sqrt[3]{\epsilon}} \\
+	& \text{Balance II and III}: \, \delta \sim 1
+\end{align*}
+where balancing I and II is what we want since we arrive at the equation $y^3 - y + \sqrt{\epsilon} = 0$. Using this formula we get the Taylor Series expansions
+\begin{align*}
+x_{+1} = 1 + \sqrt{\epsilon}x_1 + \epsilon x_2 \\
+x_{-1} = -1 + \sqrt{\epsilon}x_1 + \epsilon x_2 \\
+x_0 = \sqrt{\epsilon}x_1 + \epsilon x_2
+\end{align*}
+Plugging this back into the equation we get
+\begin{align*}
+	y_{+1}^3 - y_{+1} + \sqrt{\epsilon} & = (1 + \sqrt{\epsilon}x_1 + \epsilon x_2)^3 - (1 + \sqrt{\epsilon}x_1 + \epsilon x_2) + \sqrt{\epsilon} \\
+	& = (1 + 3\sqrt{\epsilon}x_1 + \epsilon(3x_2 + 3x_1^2) + \mathcal{O}(\epsilon^{3/2})) - (1 + \sqrt{\epsilon}x_1 + \epsilon x_2 + \mathcal{O}(\epsilon^{3/2})) + \sqrt{\epsilon} \\
+		\mathcal{O}(1): & \, 1 - 1 = 0 \\
+		\mathcal{O}(\sqrt{\epsilon}): \,& x_1 + 1 = 0 \Rightarrow x_1 = -1 \\
+		\mathcal{O}(\epsilon): &\, 2x_2 + 3x_1^2 = 0 \Rightarrow x_2 = -\frac{3}{2} \\ \\
+	y_{-1}^3 - y_{-1} + \sqrt{\epsilon} & = (-1 + \sqrt{\epsilon}x_1 + \epsilon x_2)^3 - (-1 + \sqrt{\epsilon}x_1 + \epsilon x_2) + \sqrt{\epsilon} \\
+	& = (1 + 3\sqrt{\epsilon}x_1 + \epsilon(3x_2 - 3x_1^2) + \mathcal{O}(\epsilon^{3/2})) - (1 + \sqrt{\epsilon}x_1 + \epsilon x_2 + \mathcal{O}(\epsilon^{3/2})) + \sqrt{\epsilon} \\
+	\mathcal{O}(1): & \, 1 - 1 = 0 \\
+	\mathcal{O}(\sqrt{\epsilon}): \,& x_1 + 1 = 0 \Rightarrow x_1 = -1 \\
+	\mathcal{O}(\epsilon): &\, 2x_2 - 3x_1^2 = 0 \Rightarrow x_2 = \frac{3}{2} \\ \\
+	y_0^3 - y_0 + \sqrt{\epsilon} & = (\sqrt{\epsilon}x_1 + \epsilon x_2 + \mathcal{O}(\epsilon^{3/2}))^3 - (\sqrt{\epsilon}x_1 + \epsilon x_2 + \mathcal{O}(\epsilon^{3/2})) + \sqrt{\epsilon} \\ 
+	& = \sqrt{\epsilon}(-x_1 + 1) - \epsilon x_2 +  \epsilon^{3/2}x_1 + \epsilon^2(x_1^2x_2 + x_1x_2) \\
+	\mathcal{O}(1): & \, \text{none} \\
+	\mathcal{O}(\sqrt{\epsilon}): \,& -x_1 + 1 = 0 \Rightarrow x_1 = 1 \\
+	\mathcal{O}(\epsilon): &\, x_2 = 0 \Rightarrow x_2 = 0 
+\end{align*}
+Putting all this together we get the following
+\begin{align*}
+x_{+1} & = \delta y_{+1} = \epsilon^{-1/2} - \frac{1}{2} - \frac{3}{8}\epsilon^{1/2} \\
+ x_{-1} & = \delta y_{-1} = \epsilon^{-1/2} + \frac{1}{2} + \frac{3}{8}\epsilon^{1/2} \\
+ x_0 & = \delta y_0 = 1 + \epsilon
+\end{align*}
+ \\ \\
+
+\textit{(d) $(1 - \epsilon)x^2 - 2x + 1 = 0$} \\ 
+
+Trying to do our regular Taylor series expansion, we let 
+\begin{align*}
+	x \approx x_0 + \epsilon x_1 + \epsilon^2x_2
+\end{align*}
+we end up with 
+\begin{align*}
+	(1-\epsilon)(x_0 + \epsilon x_1 + \epsilon^2x_2)^2 -2(x_0 + \epsilon x_1 + \epsilon^2x_2) + 1
+\end{align*}
+Collecting terms we get
+\begin{align*}
+	\mathcal{O}(1): & \, x_0^2 - 2x_0 + 1 = 0 \Rightarrow x_0 = 1 \\
+	\mathcal{O}(\epsilon): & \, 2x_0x_1 + x_0^2 - 2x_1 = 0 \Rightarrow 1 = 0 
+\end{align*}
+where we arrive at a contradiction. This is due to the repeated roots, but if we look at the roots with respect to the perturbation we get
+\begin{align*}
+	x = \frac{1 \pm \sqrt{\epsilon}}{1 - \epsilon}
+\end{align*}
+where we see that it scales with respect to $\sqrt{\epsilon}$. Expanding with respect to this we get
+\begin{align*}
+	(1-\epsilon)(x_0 + \sqrt{\epsilon}x_1 + \epsilon x_2)^2 - 2(x_0 + \sqrt{\epsilon}x_1 + \epsilon x_2) + 1 = 0
+\end{align*}
+Collect terms again we get
+\begin{align*}
+	\mathcal{O}{1}: & \, x_0^2 - 2x_0 + 1 = 0 \Rightarrow x_0 = 1 \\
+	\mathcal{O}(\sqrt{\epsilon}): & \, 2x_0x_1 - 2x_1 = 0 \Rightarrow \text{ Inconclusive} \\ 
+	\mathcal{O}(\epsilon): & \, -x_0^2 + x_1^2 + 2x_0x_2 - 2x_2 = 0 \Rightarrow x_1 = \pm 1
+\end{align*}
+From this we have that the perturbed roots are 
+\begin{align*}
+	x_{\pm1} = 1 \pm \sqrt{\epsilon} + \mathcal{O}(\epsilon)
+\end{align*}
+
+\newpage 
+
+\textit{(e) $\epsilon(x^2 + x) + 1 = 0$} \\ 
+
+This system is singularly perturbed so we must do scaling ($x = \delta y$) and balancing
+\begin{align*}
+	\epsilon\delta^2y^2 + \epsilon\delta y + 1 = 0
+\end{align*}
+Balancing term I with term II we get $\delta \sim 1$ which leads to the same problem as we originally had. Balancing term I and III we get $\delta \sim \frac{1}{\sqrt{\epsilon}}$ which works out. We end up getting
+\begin{align*}
+	y^2 + \sqrt{\epsilon}y + 1 = 0
+\end{align*}
+It is important to note if we try balancing term II and III we get $\delta \sim \frac{1}{\epsilon}$ which leads to another singular perturbed system. Applying the usual expansion (w.r.t to $\sqrt{\epsilon}$ instead of $\epsilon$) we get
+\begin{align*}
+	(y_0 + \sqrt{\epsilon}y_1 + \epsilon y_2)^2 + \sqrt{\epsilon}(y_0 + \sqrt{\epsilon}y_1 + \epsilon y_2) + 1
+\end{align*}
+Collecting terms we get 
+\begin{align*}
+	\mathcal{O}(1): & \, y_0^2 + 1 = 0 \Rightarrow y_0 = \pm i \\ 
+	\mathcal{O}(\sqrt{\epsilon}): & \, 2y_0y_1 + y_0 = 0 \Rightarrow y_1 = \frac{1}{2} \\
+	\mathcal{O}(\epsilon): & \, y_1^2 + 2y_0y_2 + y_1 = 0 \Rightarrow y_2 = \frac{i}{8}
+\end{align*}
+Therefore fore the perturbed roots we get
+\begin{align*}
+	y_{\pm} = \pm i - \frac{1}{2}\sqrt{\epsilon} \pm \frac{i}{8} + \mathcal{O}(\epsilon^{3/2})
+\end{align*}
+
+\newpage
+
+\textit{(f) $x^2 -1 = \epsilon x$} \\
+
+Applying our regular Taylor series expansion we get 
+\begin{align*}
+	x \approx x_0 + \epsilon x_1 + \epsilon^2 x_2
+\end{align*}
+and plugging back into the equation
+\begin{align*}
+	(x_0 + \epsilon x_1 + \epsilon^2x_2)^2 - \epsilon(x_0 + \epsilon x_1 + \epsilon^2x_2) - 1
+\end{align*}
+Collecting terms we get
+\begin{align*}
+	\mathcal{O}(1): & \, x_0^2 - 1 = 0 \Rightarrow x_0 = \pm 1 \\
+	\mathcal{O}(\epsilon): & \, 2x_0x_1 - x_0 = 0 \Rightarrow x_1 = \frac{1}{2} \\ 
+	\mathcal{O}(\epsilon^2): & \, x_1^2 + 2x_0x_2 - x_1 = 0 \Rightarrow x_2 = \pm \frac{1}{8}
+\end{align*}
+Therefore the perturbed roots are 
+\begin{align*}
+	x_{\pm 1} = \pm 1 + 	\frac{1}{2}\epsilon \pm \frac{1}{8}\epsilon^2 
+\end{align*}
+
+\newpage
+
+\textit{(g) $x^2 - 1 = \epsilon e^x$} \\ 
+
+Taking the log of both sides we get 
+\begin{align*}
+	log(x^2 - 1) = \log(\epsilon) + x \quad \Rightarrow \quad x = log(x^2 - 1) + log(\frac{1}{\epsilon})
+\end{align*}
+for which we can apply fixed point iteration. Taking when only the  $\epsilon$ term is present to be our initial guess we get
+\begin{align*}
+	x_1 & = log(\frac{1}{\epsilon}) \\
+	x_2 & = log(log(\frac{1}{\epsilon})^2 - 1) + log(\frac{1}{\epsilon}) \\	
+\end{align*}
+We can see from the above that if we keep expanding we get $\mathcal{O}(log(\frac{1}{\epsilon})^3)$. The above iteration converges as $\epsilon \rightarrow 0$. \\ \\
+
+\textit{(h) $x^2 - 4 = \epsilon ln\,x$} \\ 
+
+Just like question 3(a), we will use fixed point iteration
+\begin{align*}
+	x_n & = 2 + \frac{\epsilon ln(x)}{x + 2} \Rightarrow \\
+	x_1 & = 2 \\
+	x_2 & = 2 + \frac{\epsilon ln(2)}{4} \\
+	x_3 & = 2 + \frac{\epsilon ln(2 + \frac{\epsilon ln(2)}{4})}{4 + \frac{\epsilon ln(2)}{4}} \\
+	& = 2 + \frac{\epsilon}{4}(1 - \frac{\epsilon ln(2)}{16})(ln(2) + ln(1 + \frac{\epsilon ln(2)}{8})
+\end{align*}
+The other perturbed root is near zero. We can see that the above iteration converges as $\epsilon \rightarrow 0$.
+
+\newpage
+
+\textit{(i) $x^2 - 2\epsilon x - \epsilon = 0$} \\
+
+Trying to do our regular Taylor series expansion, we let 
+\begin{align*}
+x \approx x_0 + \epsilon x_1 + \epsilon^2x_2
+\end{align*}
+we end up with 
+\begin{align*}
+(x_0 + \epsilon x_1 + \epsilon^2x_2)^2 -2\epsilon(x_0 + \epsilon x_1 + \epsilon^2x_2) - \epsilon
+\end{align*}
+Collecting terms we get
+\begin{align*}
+\mathcal{O}(1): & \, x_0^2 = 0 \Rightarrow x_0 = 0 \\
+\mathcal{O}(\epsilon): & \, 2x_0x_1 + -2x_0 - 1 \Rightarrow -1 = 0
+\end{align*}
+where we arrive at a contradiction. This is due to the repeated roots, but if we look at the roots with respect to the perturbation we get
+\begin{align*}
+x = 1 \pm 2\sqrt{\epsilon^2 + \epsilon} \approx 1 \pm 2\sqrt{\epsilon}
+\end{align*}
+where we see that it scales with respect to $\sqrt{\epsilon}$. Expanding with respect to this we get
+\begin{align*}
+(x_0 + \sqrt{\epsilon}x_1 + \epsilon x_2)^2 - 2\epsilon(x_0 + \sqrt{\epsilon}x_1 + \epsilon x_2) - \epsilon = 0
+\end{align*}
+Collect terms again we get
+\begin{align*}
+\mathcal{O}{1}: & \, x_0^2 = 0 \Rightarrow x_0 = 0 \\
+\mathcal{O}(\sqrt{\epsilon}): & \, 2\sqrt{\epsilon}x_0x_1 = 0 \Rightarrow \text{ Inconclusive} \\ 
+\mathcal{O}(\epsilon): & \, 2\epsilon x_0x_2 + x_1^2 + 2x_0 - 1 =0 \Rightarrow x_1 = \pm 1 \\
+\mathcal{O}(\epsilon^{3/2}): & \, 2x_1x_2 - 2x_1 = 0 \Rightarrow x_2 = 1
+\end{align*}
+From this we have that the perturbed roots are 
+\begin{align*}
+x = \pm\sqrt{\epsilon} + \epsilon
+\end{align*}
+
+\newpage
+
+\textit{(j) $\epsilon x^5 + x^2 - 2x + 1 = 0$} \\
+
+This is singularly perturbed so we apply scaling by letting $x = \delta y$ and we get 
+\begin{align*}
+	\epsilon \delta^5 y^5 + \delta^2y^2 - 2\delta y + 1 = 0
+\end{align*}
+Balancing the term I against term II we get $\delta \sim e^{-1/3}$. It is important to note that when balancing term I against term II and term III we get
+\begin{align*}
+	2^{5/4} y^5 + \frac{\sqrt{2}y^2}{\epsilon^{1/4}} + 2^{5/4} + \epsilon^{1/4} = 0, \quad y^5 + \epsilon^{-2/5}y^2 - 2\epsilon^{-1/5}y + 1 = 0
+\end{align*}  
+which blow up at small $\epsilon$. Also trying to balancing the other terms against each other leads to $\delta$ being proportional to some scalar, which just leads to the original problem essentially. Now, plugging back in and expanding we get 
+\begin{align*}
+	(y_0 + \epsilon^{1/3}y_1 + \epsilon^{2/3} y_2)^5 + (y_0 + \epsilon^{1/3}y_1 + \epsilon^{2/3} y_2)^2 - 2\epsilon^{1/3}(y_0 + \epsilon^{1/3}y_1 + \epsilon^{2/3} y_2) + 1
+\end{align*}
+Collecting terms we get
+\begin{align*}
+	\mathcal{O}(1): & \, y_0^5 + y_2 = 0 \Rightarrow y_0 = 0,-1 \, (\text{ we will use $y_0$ = 0}) \\
+	\mathcal{O}(\epsilon^{1/3}): & \, y_0^4y_1 + 2y_0y_1 - 2y_0 = 0 \Rightarrow y_1 = -\frac{2}{3} \\
+	\mathcal{O}(\epsilon^{2/3}): & \, 5y_0^4y_2 + 10y_1^2y_0^3 + 2y_0y_1 + y_1^2 + y_1 + 1 \Rightarrow y_2 = \frac{11}{9} 
+\end{align*}
+Using this and plugging back into $x = \delta y$ we get that the perturbed root is 
+\begin{align*}
+	x = \delta y = \frac{1}{e^{1/3}}\bigg(-1 -\frac{2}{3}\epsilon^{1/3} + \frac{11}{9}\epsilon^{2/3} \bigg) = -\frac{1}{\epsilon^{1/3}} - \frac{2}{3} + \frac{11}{9}\epsilon^{1/3}
+\end{align*}
+
+\end{document}
