@@ -1,0 +1,196 @@
+\documentclass[12pt]{article}
+
+%-------------PACKAGES------------- 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{pgfplots}
+\usepackage{float}
+\usepackage{braket}
+\usepackage{titling}
+\usepackage{tikz}
+\usepackage{mwe}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{algorithm,algpseudocode}
+\usetikzlibrary{shapes,arrows,chains}
+\usetikzlibrary[calc]
+\usepackage{chngcntr}
+
+%-------------FORMATTING-------------
+\setlength{\droptitle}{-8.5em} 
+\setlength{\parindent}{0pt}
+\def\LW{\dimexpr.25\linewidth-.5em} 
+\tikzstyle{line} = [draw, -latex']
+ 
+%--------------COMMANDS--------------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+%\renewcommand{\qedsymbol}{\filledbox}
+
+\DeclarePairedDelimiter \abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter \babs{\bigg\lvert}{\bigg\rvert}%
+\DeclarePairedDelimiter \norm{\lVert}{\rVert}%
+
+%------------ENVIRONMENTS------------- 
+\newenvironment{theorem}[2][]{\begin{trivlist}
+\item[{\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Reflection]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{definition}[2][]{\begin{trivlist}
+\item[{\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%-------------CODE-STYLE------------
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+	language=C++,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\tikzset{
+	path image/.style={
+		path picture={
+			\node at (path picture bounding box.center) {
+				\includegraphics[height=3cm]{example-image}};}},
+	path tikzimage/.style={
+		path picture={
+			\node at (path picture bounding box.center)
+			[circle, fill=blue!50, scale=2, text=yellow]{Bravo};}}
+}
+	
+\lstset{
+	morekeywords={end}
+}
+
+%------------------------------------ 
+%---------START-OF-DOCUMENT----------
+%------------------------------------
+\begin{document}
+ 
+\title{Homework 2}
+\author{David Miller \& Hannah McLaughlin \\ 
+CIS 5371: Cryptography} 
+
+\maketitle
+
+\textit{\textbf{Problem 1.} Bob has a blockcipher $E : \{0, 1\}^k \times \{0, 1\}^n \rightarrow \{0, 1\}^n$, but he’s unhappy with the short key length $k$. He wants to double the key length by constructing a blockcipher $F : \{0, 1\}^{2k} × \{0, 1\}^n \rightarrow \{0, 1\}^n$ on top of $E$, but he doesn’t want to use the 3DES-2 construction, since it’s too slow for him. So Bob tries the following construction: $F_{K_1,K_2}(x) = E_{K_1} (x \oplus K_2)$. Give a key-recovery attack on Bob’s construction, using $\mathcal{O}(2^k)$ time, but only $\mathcal{O}(1)$ space and queries.} \\
+
+Let $Q_0, Q_1$ be the querries $O^1$ and $1^l$ to the oracle, respectively. From this we obtain ciphertexts $c_0$ and $c_1$
+\begin{align}
+	Q_0 = 0^l & \Rightarrow \ c_0 \leftarrow E_{K_1}(K_2)\\
+    Q_1 = 1^l & \Rightarrow \ c_1 \leftarrow E_{K_1}(1 \oplus K_2)
+\end{align}
+such that $K_1, K_2$ are the unknown keys we are trying to recover. Algorithm 1 leverages these queries to recover $K_1, K_2$. \\
+
+\begin{algorithm}[H]
+	\caption{Key-Recovery Attack}
+		\begin{algorithmic}[1]
+			\For{$k^\prime \in \mathcal{K}$}
+			\State{$k_2^'$ $\leftarrow$ $E_{k'}^{-1}(Q_0)$}
+			\State{$x$ $\leftarrow$ $E_{k'}^{-1}(Q_1)$}
+			\If{$x$ $\oplus$ \ $k_2^'$ = $1^l$:}
+			\State{$K_1$ $\leftarrow$ $k^'$ , $K_2$ $\leftarrow$ $k_2^'$}
+			\Return{}
+			\EndIf
+			\EndFor
+		\end{algorithmic}
+\end{algorithm}
+    
+The for loop will iterate at most $\abs{\mathcal{K}} = 2^k$ times, resulting in $\mathcal{O}(2^k)$ time complexity. Algorithm 1 overwrites two temporary variables for each $k^\prime \in \mathcal{K}$ and stores the keys when correctly determined which results in $\mathcal{O}(1)$ space complexity.  Since we make just two queries to the oracle we achieve $\mathcal{O}(1)$ query complexity. The algorithm is essentially a brute force approach by iterating over all possible $K_1$ values since we get $K_2$ ``for free" by knowing how the encryption relies on $K_2$.
+    
+\newpage
+\setcounter{equation}{0}
+\textit{\textbf{Problem 2.} Alice has a function family $F : \{0, 1\}^k$ \times \ $\{0, 1\}^n \rightarrow \{0, 1\}^n$ that she intends to use as a PRF. However, this $F$ has a serious weakness: for any fixed key $K$, if we pick a random message $x$ $\xleftarrow[]{}$$ $\{0, 1\}^n$, then the
+first byte of $F_K(x)$ will be $0^8$ with probability $\frac{1}{128}$, instead of the desired probability $\frac{1}{256}$. Adversary Eve wants to break the PRF security of $F$. Of course it’s trivial to have advantage $\frac{1}{128}$ $-$ $\frac{1}{256}$ = $\frac{1}{256}$ using just a single random query. However, being greedy, Eve aims for more. Give an efficient PRF attack (of multiple queries) to achieve advantage at least 0.99. For your analysis, you can use the
+following tool: } \\
+
+\textit{\underline{Hoeffding's inequality}: Let $X_1$, . . . , $X_m$ be independent and identically distributed random variables, each in $\{0, 1\}$ and each taking on the value 1 with probability $p$. Let $\overline{X}$ = $\frac{1}{n}$ $(X_1 + \dots + X_n)$ be the ``empirical mean'' of the observations, which has the expected value $\mathbb{E}[X]$ = $p$. Then for any real number $t \geq 0$,
+}
+\begin{center}
+    Pr$[|\overline{X} - p| \geq t] \leq 2e^{-2nt^2}$ 
+\end{center}
+
+To achieve an advantage of at least 0.99, we will use Hoeffding's inequality.\\ 
+
+We know 
+\begin{align}
+    Adv_A & = Pr[Real \Rightarrow 1] - Pr[Random \Rightarrow 1]\\
+    0.99 & \leq (1 - 2e^{-2nt^2}) - 2e^{-2nt^2}
+\end{align}
+
+
+
+We must solve for $n$, or the number of queries made to the oracle, to give an efficient PRF attack. 
+
+\begin{align}
+0.99 &\leq  1 - 2e^{-2nt^2} - 2e^{-2nt^2}\\
+0.99 - 1 & \leq - 2e^{-2nt^2} - 2e^{-2nt^2}\\
+- 0.01 & \leq - 4e^{-2nt^2}\\
+\frac{- 0.01}{-4} & \geq e^{-2nt^2}\\
+\ln{\frac{0.01}{4}} & \geq -2nt^2\\
+-\ln{\frac{4}{0.01}} & \geq -2nt^2\\
+-\ln{(400)} & \geq -2nt^2\\
+\frac{\ln{(400)}}{2t^2} & \leq n
+\end{align}
+
+Now we find a $t$ value so that there is no intersection between the closed $t$-neighborhoods of $\frac{1}{128}$ and $\frac{1}{256}$, where the closed $t$-neighborhood of a point $x$ is the set $\overline{B_t(x)} = \{y \, \vert \, \abs{y-x} \leq t\}$. We use the midpoint formula to help us choose it. 
+%this needs to be reworded - maybe use confidence intervals instead? 
+\begin{align}
+\frac{\frac{1}{128}-\frac{1}{256}}{2} = \frac{3}{512}
+\end{align}
+
+For $t = \frac{3}{512} - \frac{1}{256} = \frac{1}{128} - \frac{3}{512} = \frac{1}{512}$ we have the $\overline{B_t(\frac{1}{128})} \cap \overline{B_t(\frac{1}{256})}$ is the singleton $\{\frac{3}{512}\}$. Therefore any value less than $t = \frac{1}{512}$ will do. Letting $t = \frac{2}{1025}$ we get that
+
+
+
+Therefore $n$ $\geq$ 786,848 queries to achieve an advantage of at least 0.99. To solve this, we keep a counter variable that counts the number of queries where the first byte is equal to $0^8$ and have the queries $x_i$ uniformly and independently distributed for $i = 1, \dots, n$.
+
+
+\begin{algorithm}[H]
+	\caption{Breaking PRF Security}
+		\begin{algorithmic}[1]
+		    \State{counter $\leftarrow$ 0, $t \leftarrow 2/1025$, $n \leftarrow 786848$}
+			\For{$i = 1$ to $n$}
+			\If{first byte of $F_k(x_i)$ = $0^8$:}
+			\State{counter $\leftarrow$ counter + 1}
+			\EndIf
+			\EndFor
+			\If{$\abs{1/128 - \text{counter}/n}$ $\leq$ $t$}
+			\Return{1}
+			\Else{}
+			\Return{0}
+			\EndIf
+		\end{algorithmic}
+\end{algorithm}
+
+From Algorithm 2, we have that counter/$n$ = $\frac{1}{n}(y_1 + \dots + y_n)$ where $y_i = 1$ if the first byte was $0^8$ and 0 otherwise. Therefore, Algorithm 2 returns 1 if we determined that we are in the real room with a confidence level of 99\%. 
+
+\end{document}
