@@ -1,0 +1,35 @@
+
+% Tallahassee Beamer Theme
+% Ian Finlayson
+% January 31, 2011
+
+% color and compression are options
+\DeclareOptionBeamer{compress}{\beamer@compresstrue}
+\DeclareOptionBeamer{RGB}{\definecolor{beamer@tallahassee@color}{RGB}{#1}}
+\ProcessOptionsBeamer
+
+% setup miniframes the way we want
+\useoutertheme[subsection = false]{miniframes}
+
+% setup colors
+\usecolortheme{whale}
+\usecolortheme{orchid}
+\setbeamercolor{structure}{fg=beamer@tallahassee@color}
+
+% setup inner frame
+\useinnertheme{rounded}
+
+% setup font
+\setbeamerfont{block title}{size={}}
+
+% covered things should be invisible
+\setbeamercovered{invisible}
+
+% navigation symbols not needed with miniframes
+\setbeamertemplate{navigation symbols}{}
+
+% make it look nice
+\setbeamertemplate{items}[ball]
+\setbeamertemplate{blocks}[rounded][shadow = true]
+
+

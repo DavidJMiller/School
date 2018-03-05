@@ -1,0 +1,166 @@
+\documentclass[12pt]{article}
+
+%-------------PACKAGES------------- 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{pgfplots}
+\usepackage{float}
+\usepackage{braket}
+\usepackage{titling}
+\usepackage{wrapfig}
+\usepackage{tikz}
+\usepackage{mwe}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{scrextend}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{algorithm,algpseudocode}
+\usetikzlibrary{shapes,arrows,chains}
+\usetikzlibrary[calc]
+
+%-------------FORMATTING-------------
+\setlength{\droptitle}{-7.5em} 
+\setlength{\parindent}{0pt}
+\def\LW{\dimexpr.25\linewidth-.5em} 
+\tikzstyle{line} = [draw, -latex']
+
+%--------------COMMANDS--------------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+%\renewcommand{\qedsymbol}{\filledbox}
+
+\DeclarePairedDelimiter \abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter \babs{\bigg\lvert}{\bigg\rvert}%
+\DeclarePairedDelimiter \norm{\lVert}{\rVert}%
+
+%------------ENVIRONMENTS------------- 
+\newenvironment{theorem}[2][]{\begin{trivlist}
+		\item[{\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+		\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+		\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Reflection]{\begin{trivlist}
+		\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Proposition]{\begin{trivlist}
+		\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+		\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{definition}[2][]{\begin{trivlist}
+		\item[{\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\algdef{SE}[SUBALG]{Indent}{EndIndent}{}{\algorithmicend\ }%
+\algtext*{Indent}
+\algtext*{EndIndent}
+
+%-------------CODE-STYLE------------
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+	language=C++,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\tikzset{
+	path image/.style={
+		path picture={
+			\node at (path picture bounding box.center) {
+				\includegraphics[height=3cm]{example-image}};}},
+	path tikzimage/.style={
+		path picture={
+			\node at (path picture bounding box.center)
+			[circle, fill=blue!50, scale=2, text=yellow]{Bravo};}}
+}
+
+\lstset{
+	morekeywords={end}
+}
+
+%------------------------------------ 
+%---------START-OF-DOCUMENT----------
+%------------------------------------
+\begin{document}
+	
+	\title{Paper Summary}
+	\author{David Miller \\ 
+		CIS 5930: Social Network Mining} 
+	
+	\maketitle 
+	
+	The purpose of this paper is to present a method that can be used for detecting rumors or credible new users from social media. Mathematically we let $\boldsymbol{D} = \{\boldsymbol{d_1}, \dots, \boldsymbol{d_m}\} \in \mathbb{R}^{m \times n}$ be a data matrix with row $\boldsymbol{d_1} \in \mathbb{R^n}$ being a data instance and column $\boldsymbol{f_i} \in \mathbb{R}^m$ a vector of the $i$-th feature. We also let $\boldsymbol{y} \in \{-1,1\}^m$ be a label vector such that $y_i$ = 1 if $i$ refers to a rumor and -1 otherwise. Given $\boldsymbol{D}$ and $\boldsymbol{y}$, the main goal is to learn a predictor to accurately classify rumors and non-rumors based on social media input \cite{paper}. From \cite{paper2} the matrix factorization problem
+	\begin{align}
+		\min\limits_{\boldsymbol{U}, \boldsymbol{V}}\frac{1}{2}\norm{\boldsymbol{D} - \boldsymbol{U}\boldsymbol{V}^T}^2_F , \quad s.t. \,\, \boldsymbol{U} \in \{0,1\}^{m \times k}, \, \boldsymbol{U1} = \boldsymbol{1} ,
+	\end{align} 
+	where $\boldsymbol{1}$ is a vector of 1s and $\norm{\cdot}_F$ is the Frobenius norm, is known to solve latent representations. $\boldsymbol{U} \in \mathbb{R}^{m \times k}$ is the low-rank representation of users and $\boldsymbol{V} \in \mathbb{R}^{n \times k}$ is the low-rank representation of features. This factorization separates data from feature by k latent factors. After manipulation, the paper ends up at an equation (omitted for this review) that has three parameters $\boldsymbol{U}$, $\boldsymbol{V}$, $\boldsymbol{w}$ which becomes the objective function to minimize. Since the objective function is not convex with respect to all three parameters, but is to each individually, stochastic gradient descent is applied to a parameter while fixing the other two iteratively. The rumor classifier is obtained once given a fixed $\boldsymbol{U}$ and $\boldsymbol{V}$. the algorithm is 
+	\begin{algorithm}[H]
+		\caption{Early Detection of Emerging Rumors}
+		\begin{algorithmic}[1]
+			\Statex{\textbf{Input:} Data matrix $\boldsymbol{D}$, label vector $\boldsymbol{y}$, maximal number of iterations $\boldsymbol{I}$}
+			\Statex{\textbf{Output:} $\boldsymbol{U}$, $\boldsymbol{V}$, $\boldsymbol{w}$}
+			\Indent
+			\State{Generate $\boldsymbol{U}$. $\boldsymbol{V}$, and $\boldsymbol{w}$ randomly}
+			\For{$i=1$ to $I$}
+			\State{Update $\boldsymbol{U}$}
+			\State{Update $\boldsymbol{V}$}
+			\State{Update $\boldsymbol{w}$}
+			\If{convergence} \State{break} \EndIf
+			\EndFor \\
+			\quad \, \Return{$\boldsymbol{U}$, $\boldsymbol{V}$, $\boldsymbol{w}$}
+			\EndIndent
+		\end{algorithmic}
+	\end{algorithm}
+	
+	From this rumors and non-rumors can be classified from the returned parameters $\boldsymbol{U}$, $\boldsymbol{V}$, $\boldsymbol{w}$. In terms of future direction, the algorithm can use other sources of information than just social media. The paper talks about cross-modal information, but another thing I had in mind was geo-location. Sources near a rumors point of interest are more likely to be trustworthy than sources far from the rumors point of interest. 
+	
+	\newpage
+	
+	Three strengths I found with the paper are
+	\begin{enumerate}
+		\item The accuracy of detecting rumors outperforms all its competitiors it was tested against (Pooling, Elastic Net, KM SVM, FE LL, LK RBF) with somewhat significant margins.
+		\item Rumor detection algorithm lends itself to countless applications, and the paper did a fantastic job of outlining its potential uses. This is very good for people who are reading the paper and have commercial endeavors in mind.
+		\item The analysis shows that parts of the algorithm can be done in $\mathcal{O}(k^3)$ time, where $k << n$. This means that the algorithm is dependent of the amount of clusters, or categories.
+	\end{enumerate} 
+	\vspace{0.5cm}
+	
+	Three weaknesses I found with the paper are
+	\begin{enumerate}
+		\item There is no mention of what system the algorithm was tested on. This means the entire algorithm may need warehouse scale computers to be driven.
+		\item The algorithm relies on a huge data size, making in impractical for rumors/non-rumors of little importance (not many people talking about it).
+		\item The objective function can not used gradient descent directly, but rather needs to fix certain parameters while applying gradient descent to the dynamic parameter. This can lead to non-convergence. 
+	\end{enumerate}
+	\vspace{0.5cm}
+	
+	Questions for the reader
+	\begin{enumerate}
+		\item As of now I have no questions but I am sure I will have some during the presentation. 
+	\end{enumerate}
+	\vspace{0.5cm}
+	
+	\begin{thebibliography}{unsrt}
+		\bibitem{paper}
+		Liang Wu, Jundong Li, Xia Hu, Huan Liu \emph{Gleaning Wisdom from the Past: Early Detection of Emerging Rumors in Social Media}, KDD’17, August 13-17, 2017, Halifax, NS, Canada.
+		\bibitem{paper2}
+		Jundong Li, Xia Hu, Liang Wu, Huan Liu \emph{Robust Unsupervised Feature Selection on Networked Data}, KDD’17, August 13-17, 2017, Halifax, NS, Canada.
+	\end{thebibliography}
+	
+\end{document}\documentclass[12pt]{article}
