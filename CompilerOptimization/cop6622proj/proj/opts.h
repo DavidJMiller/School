@@ -1,0 +1,13 @@
+void unreachablecodeelim();
+void remvbranchchains();
+void reversebranches();
+void deadasgelim();
+void regalloc(int *);
+void codemotion(int *);
+void filldelayslots();
+void readinrules();
+void applypeeprules(int *);
+void localconstprop(int *);
+void localcopyprop(int *);
+void localcse(int *);
+void cseinblk(struct bblk *, int *);

@@ -1,0 +1,5 @@
+dumpstats	- dumps statistics at the end of the execution
+funcs		- dumps names of the functions in the file
+getstats	- formats the measurements report by reading the stats file
+run		- shell script to get measurements
+stripstats	- strips out unnecessary lines

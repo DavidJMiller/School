@@ -1,0 +1,10 @@
+#!/bin/csh
+
+/home/faculty/whalley/cop6622proj/funcs < $1 > funcnames.txt
+gcc $1
+/home/faculty/whalley/shade/bin/spixcounts -- a.out $2 $3 $4 $5 $6 $7 $8 $9 > dumpstats.out
+/home/faculty/whalley/cop6622proj/stripstats < dumpstats.out > dump.out
+/home/faculty/whalley/cop6622proj/dumpstats >& spixstats.out
+cat dump.out
+/home/faculty/whalley/cop6622proj/getstats < spixstats.out
+rm a.out funcnames.txt a.out.1.bb dump.out dumpstats.out spixstats.out
