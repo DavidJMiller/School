@@ -1,0 +1,154 @@
+# COMPILING
+To compile the code, simply type "make" in the code directory. To clean, type 
+"make clean". After a successful make, the server and client can be executed by 
+typing the following
+
+    ./messenger_server [user_info_file_name] [server_config_file_name]
+    ./messenger_client [client_config_file_name]
+
+For the server and client applications to execute properly, the files must have 
+the following formats
+    
+    user_info_file:     username|password|friendname;friendname;...;friendname\n
+    server_config_file: port:portnumber
+    client_config_file: FQDN:portnumber
+
+where portumber is a positive integer and FQDN is the fully qualified domain 
+name of the server. 
+
+# OVERVIEW
+The server is a passive application that simply outputs a log of acivities 
+happening. The server uses select() for multiplexing whereas the client uses
+pthreads for multiplexing. The client is an active application that requires 
+user interaction. The general model between server and client is given 
+graphically below.
+    
+       SERVER                            CLIENT
+    
+    ############               
+    # socket() #
+    ############
+         |
+         |
+         V
+    ############  
+    #  bind()  #
+    ############
+         |
+         |
+         V
+    ############                       ############
+    # listen() #                       # socket() #
+    ############                       ############
+         |                                  |
+         |                                  |
+         V                                  |
+    ############                            |
+    # accept() #                            |
+    ############                            |
+         |                                  V
+     block until  Establish connection ############                
+      there are  <-------------------- # connect()#
+     connections                       ############
+     from client                            |
+         |                                  |
+         V                                  V
+    ############         Request       ############ 
+--> #  read()  # <-------------------- #  write() # <--
+|   ############                       ############   |
+|        |                                  |         |
+|     process                               |         |
+|     request                               |         |
+|        |                                  |         |
+|        V                                  V         |
+|   ############          Reply        ############   |
+--- #  write() # --------------------> #  read()  # ---
+    ############                       ############
+         |                                  |
+         |                                  |    
+         V                                  V
+    ############                       ############
+    #  close() #                       #  close() #
+    ############                       ############
+
+# RULES AND ACTIONS
+The following are rules the code enforces and actions that happen
+
+    * Username and password do not contain whitespace
+    * Max read and write between server and client are 512 bytes
+    * Client listens on port 5100
+    * Server has a max backlog of 5 when listening
+    * Max hostname is 128 bytes
+    - After a new user registers successfully or a user accepts a friend invite, 
+      the server will lock up the database file (user_info_file) and update the 
+      file to reflect these changes
+    - When a friend messages a user, a new thread is spawned for reading from
+      their associated file descriptor; these are spawned as detachable so as 
+      not to have to wait by calling join()
+    - There is a thread dedicated to listening for incoming connections; this is
+      spawned as detachable so as xnot to have to wait by calling join()
+    - There is a thread dedicated to handlig STDIN from the user
+    - There is a thread dedicated for listening to server's responses
+    - The server sends the client a list of their online friends when they log 
+      in successfuly and make themsleves disvoerable by calling listen()
+    - When a user logins, all of their friends are sent to them. When a user 
+      successfully makes themselves discoverable by calling listen(), all of t
+      their online friends location is sent to them and the friends receive the
+      user's location.
+    - Friends' usernames and online status are printed to screen when a user's
+      friend logs on. This information is also printed when an ia occurs.
+
+Some of the rules above are marked with the '*' character which means they can 
+be changed within the code without affecting how it works. Things with the '-' 
+character are a must and should not be changed. Changing these might have 
+unpredictable results on the code.
+
+There are 3 master threads and an arbitrary amount of secondary threads. The 
+master threads are
+
+    STDIN_THREAD            SERVER_THREAD            ACCEPT_THREAD
+    
+   input from user <-      listen to server <-   accept new connection  <-
+         |          |             |          |             |             |
+         v          |             v          |             v             |
+   write to server --        get response   --   record newfd and spawn --
+                                                 thread to read from fd
+
+The STDIN_THREAD and SERVER_THREAD are spawned in main() and waited on with 
+join(), but ACCEPT_THREAD is spawned after a successful login and once the 
+client has made themselves discoverable. When a new conection is made to a 
+friend for chatting, a thread is spawned to listen on that file descriptor.
+
+# KNOWN BUGS
+There are no bugs that affect the logic of the code as of December 3, 2018. 
+However there is a small nuisance. When a friend tries to message a friend that 
+has logged out "127.0.0.1 >> ......" is printed to scrren followed by 
+"Could not retrieve friend's addr info (probably offline)".
+
+# REFERENCES
+Some code was influenced by online sources and much of the code to setup sockets 
+and connections was influenced by our course examples. The following are 
+references to the online sources I used, as well as useful information to know.
+
+[1] Dr. Duan
+    class notes and examples
+
+[2] joinable and detachable threads (setting and using these attributes)
+    http://man7.org/linux/man-pages/man3/pthread_attr_setdetachstate.3.html
+
+[3] select() method used in mesenger_server.cpp:
+    https://gist.github.com/Alexey-N-Chernyshov/4634731#file-client-c-L180
+
+[4] socket() SO_REUSEPORT option
+    https://stackoverflow.com/questions/24194961/
+    how-do-i-use-setsockoptso-reuseaddr
+
+[5] htonl() use (and why it matters)
+    https://stackoverflow.com/questions/21311435/does-htonl-change-byte-order-on-big-endian-machine
+
+[6] ai_cannoname
+    https://stackoverflow.com/questions/34834763/what-can-be-expected-in-the-field-ai-canonname-when-calling-getaddrinfo
+
+[7] when and why to use bind()
+    https://stackoverflow.com/questions/12763268/why-is-bind-used-in-tcp-why-is-it-used-only-on-server-side-and-not-in-client
+    

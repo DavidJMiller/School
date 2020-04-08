@@ -1,0 +1,13 @@
+user1|password1|friend1_1;friend2_1;friend3_1;david;user2
+user2|password2|friend1_2;user5;user1;celine
+user3|password3|celine
+user4|password4|friend1_4;friend2_4;friend3_4;friend4_4;friend5_4;david
+user5|password5|friend1_5;friend2_5;david;user2
+david|miller|celine;user1;user4;matt;user5;nick;devon;jordan;joe
+celine|nagales|david;nick;devon;user3;user2;joe
+nick|castelli|david;celine;devon;joe
+matt|mccurdy|david
+devon|bata|david;celine;nick
+jordan|jordan|david
+joseph|miller|
+joe|blow|david;celine;nick
